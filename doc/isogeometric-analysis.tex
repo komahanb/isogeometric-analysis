@@ -91,13 +91,12 @@ The main objective of the project is implementation of NURBS based Isogeometric 
   \caption{\emph{NURBS decretized quarter-plate with a hole}}
   \label{fig:iga-demo}
 \end{figure}
-\subsection{Importance}
+\subsection{Importance of IGA}
 \begin{itemize}
-  \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements.  
-  \item In IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
-  \item IGA reduces the burden of mesh regeneration and thus also minimizes the computational cost to a great extent.
+  \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements. Whereas in IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
+  \item IGA reduces the burden of mesh regeneration and thus minimizes the computational cost. % to a great extent.
   \item Due to inherent higher order continuity and exact representation of geometrical features, IGA has been shown to be advantageous in contact, fluid, structural vibration problems and more. 
-  \item This technique can also be applied to specific problems which have been solved with FEM to attain improved solution.
+  \item IGA can be applied to specific problems which have been solved with FEM to attain improved solution.
 \end{itemize}
 \section{Framework}
 In IGA, apart from the geometrical details(length, height, width) of a model, its parametric details such as knot vectors , the order of NURBS basis functions, and the control points are also needed to construct the exact form of discretized geometry. The evaluation of NURBS basis functions and their respective derivatives, along with their corresponding mappings are need to be done along with the enforcement procedure for different boundary conditions for NURBS defined geometry. The combinations of these complete the processing stage for the proposed implementation of IGA within the FEA structure.
@@ -106,12 +105,12 @@ In IGA, apart from the geometrical details(length, height, width) of a model, it
 \bibitem{Agarwal} 
 Vishal Agrawal, Sachin S. Gautam.  
 \textit{IGA: A Simplified Introduction and Implementation Details for Finite Element Users}. 
-The Institution of Engineers(India), 2017.
+The Institution of Engineers (India), 2017.
  
 \bibitem{Milic} 
 Predrag Mili{\'c}, Dragan Marinkovi{\'c}. 
 \textit{Isogeometric Structural Analysis based on NURBS shape functions}.
-FACTA UNIVERSITATIS, Vol. 11, ${N^o}$2, 2013.
+FACTA UNIVERSITATIS, Vol. 11, ${No}$~2, 2013.
 
 \end{thebibliography}
 \end{document}

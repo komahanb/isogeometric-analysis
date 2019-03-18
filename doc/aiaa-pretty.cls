@@ -571,8 +571,9 @@
 \newcommand{\showfooterlabel}{\@q@footer@labeltrue}
 \newcommand{\hidefooterlabel}{\@q@footer@labelfalse}
 % Command to hold the value of the footer
-\newcommand{\@aiaa@footer@label}{ %
- American Institute of Aeronautics and Astronautics}
+%\newcommand{\@aiaa@footer@label}{ %
+% American Institute of Aeronautics and Astronautics}
+\newcommand{\@aiaa@footer@label}{}
 % Command to set it
 \newcommand{\footerlabel}[1]{ %
  \renewcommand{\@aiaa@footer@label}{#1} \showfooterlabel}
@@ -582,7 +583,8 @@
 % Set the default value of the footer label.
 \if@q@plain
 \else
- \footerlabel{American Institute of Aeronautics and Astronautics}
+% \footerlabel{American Institute of Aeronautics and Astronautics}
+\footerlabel{}
 \fi
 
 % Command to hold the value of the page reference
