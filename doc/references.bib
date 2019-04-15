@@ -1,0 +1,74 @@
+@Article{Agrawal2018,
+author="Agrawal, Vishal
+and Gautam, Sachin S.",
+title="IGA: A Simplified Introduction and Implementation Details for Finite Element Users",
+journal="Journal of The Institution of Engineers (India): Series C",
+year="2018",
+month="May",
+day="14",
+abstract="Isogeometric analysis (IGA) is a recently introduced technique that employs the Computer Aided Design (CAD) concept of Non-uniform Rational B-splines (NURBS) tool to bridge the substantial bottleneck between the CAD and finite element analysis (FEA) fields. The simplified transition of exact CAD models into the analysis alleviates the issues originating from geometrical discontinuities and thus, significantly reduces the design-to-analysis time in comparison to traditional FEA technique. Since its origination, the research in the field of IGA is accelerating and has been applied to various problems. However, the employment of CAD tools in the area of FEA invokes the need of adapting the existing implementation procedure for the framework of IGA. Also, the usage of IGA requires the in-depth knowledge of both the CAD and FEA fields. This can be overwhelming for a beginner in IGA. Hence, in this paper, a simplified introduction and implementation details for the incorporation of NURBS based IGA technique within the existing FEA code is presented. It is shown that with little modifications, the available standard code structure of FEA can be adapted for IGA. For the clear and concise explanation of these modifications, step-by-step implementation of a benchmark plate with a circular hole under the action of in-plane tension is included.",
+issn="2250-0553",
+doi="10.1007/s40032-018-0462-6",
+url="https://doi.org/10.1007/s40032-018-0462-6"
+}
+
+@book{Piegl:NurbsBook,
+ author = {Piegl, Les and Tiller, Wayne},
+ title = {The NURBS Book (2Nd Ed.)},
+ year = {1997},
+ isbn = {3-540-61545-8},
+ publisher = {Springer-Verlag},
+ address = {Berlin, Heidelberg},
+} 
+
+@article{Milic2013,
+ author = {Predrag Mili{\'c}, Dragan Marinkovi{\'c}},
+ title = {Isogeometric Structural Analysis based on NURBS shape functions},
+ journal = {FACTA UNIVERSITATIS},
+ volume = "{11, No. 2}",
+ year = {2013}
+} 
+
+@article{HUGHES20054135,
+title = "Isogeometric analysis: CAD, finite elements, NURBS, exact geometry and mesh refinement",
+journal = "Computer Methods in Applied Mechanics and Engineering",
+volume = "194",
+number = "39",
+pages = "4135 - 4195",
+year = "2005",
+issn = "0045-7825",
+doi = "https://doi.org/10.1016/j.cma.2004.10.008",
+url = "http://www.sciencedirect.com/science/article/pii/S0045782504005171",
+author = "T.J.R. Hughes and J.A. Cottrell and Y. Bazilevs",
+keywords = "NURBS, Finite element analysis, CAD, Structural analysis, Fluid dynamics, Mesh refinement, Convergence, Boundary layers, Internal layers, Geometry, Shells, -refinement, -refinement, -refinement",
+abstract = "The concept of isogeometric analysis is proposed. Basis functions generated from NURBS (Non-Uniform Rational B-Splines) are employed to construct an exact geometric model. For purposes of analysis, the basis is refined and/or its order elevated without changing the geometry or its parameterization. Analogues of finite element h- and p-refinement schemes are presented and a new, more efficient, higher-order concept, k-refinement, is introduced. Refinements are easily implemented and exact geometry is maintained at all levels without the necessity of subsequent communication with a CAD (Computer Aided Design) description. In the context of structural mechanics, it is established that the basis functions are complete with respect to affine transformations, meaning that all rigid body motions and constant strain states are exactly represented. Standard patch tests are likewise satisfied. Numerical examples exhibit optimal rates of convergence for linear elasticity problems and convergence to thin elastic shell solutions. A k-refinement strategy is shown to converge toward monotone solutions for advection–diffusion processes with sharp internal and boundary layers, a very surprising result. It is argued that isogeometric analysis is a viable alternative to standard, polynomial-based, finite element analysis and possesses several advantages."
+}
+
+@article{NGUYEN201589,
+title = "Isogeometric analysis: An overview and computer implementation aspects",
+journal = "Mathematics and Computers in Simulation",
+volume = "117",
+pages = "89 - 116",
+year = "2015",
+issn = "0378-4754",
+doi = "https://doi.org/10.1016/j.matcom.2015.05.008",
+url = "http://www.sciencedirect.com/science/article/pii/S0378475415001214",
+author = "Vinh Phu Nguyen and Cosmin Anitescu and Stéphane P.A. Bordas and Timon Rabczuk",
+keywords = "Isogeometric analysis, NURBS, Finite elements, CAD, Isogeometric collocation",
+abstract = "Isogeometric analysis (IGA) represents a recently developed technology in computational mechanics that offers the possibility of integrating methods for analysis and Computer Aided Design (CAD) into a single, unified process. The implications to practical engineering design scenarios are profound, since the time taken from design to analysis is greatly reduced, leading to dramatic gains in efficiency. In this manuscript, through a self-contained Matlab® implementation, we present an introduction to IGA applied to simple analysis problems and the related computer implementation aspects. Furthermore, implementation of the extended IGA which incorporates enrichment functions through the partition of unity method (PUM) is also presented, where several examples for both two-dimensional and three-dimensional fracture are illustrated. We also describe the use of IGA in the context of strong-form (collocation) formulations, which has been an area of research interest due to the potential for significant efficiency gains offered by these methods. The code which accompanies the present paper can be applied to one, two and three-dimensional problems for linear elasticity, linear elastic fracture mechanics, structural mechanics (beams/plates/shells including large displacements and rotations) and Poisson problems with or without enrichment. The Bézier extraction concept that allows the FE analysis to be performed efficiently on T-spline geometries is also incorporated. The article includes a summary of recent trends and developments within the field of IGA."
+}
+
+@article{KACPRZYK201487,
+title = "Isogeometric Analysis as a New FEM Formulation - Simple Problems of Steady State Thermal Analysis",
+journal = "Procedia Engineering",
+volume = "91",
+pages = "87 - 92",
+year = "2014",
+note = "XXIII R-S-P Seminar, Theoretical Foundation of Civil Engineering (23RSP) (TFoCE 2014)",
+issn = "1877-7058",
+doi = "https://doi.org/10.1016/j.proeng.2014.12.018",
+url = "http://www.sciencedirect.com/science/article/pii/S1877705814030367",
+author = "Zbigniew Kacprzyk and Katarzyna Ostapska-Łuczkowska",
+keywords = "Isogeometric Analysis (IGA), Finite Element Method (FEM), B-spline, NURBS, T-spline, CAD, Computer Aided Engineering ;",
+abstract = "The subject of this article concerns Isogeometric Analysis as a new formulation within Finite Element Method. Motivation for this new approach was presented together with theoretical foundations of the method. The main subject of the paper is numerical implementation of the method in the Matlab environment. Special focus was put on the new concept of element and new geometry data interpretation in terms of analysis. Object oriented programming was utilized to produce more universal tool for future investigations. Several examples for Poisson's partial differential equation solution were presented. The h-refinement was utilized to show method convergence. Steady state thermal analysis was performed with temperatures and heat flux as boundary conditions. Quick geometry data transfer and mesh refinement from Rhino software with Grasshopper plug-in was also prepared and described in the paper. Finally, authors’ conclusions concerning new method were presented and comparison between FEM and IGA was made on the basis of the studied examples."
+}

@@ -74,7 +74,7 @@
 
 \graphicspath{{talk/}{talk/figures/}{figures/}}
 
-\title{Isogeometric Analysis using NURBS}
+\title{Isogeometric Finite Element Analysis using Non-Uniform Rational B-Splines}
 \author{Komahan Boopathy  and Siddarth Niranjan Babu\\
   {\normalsize\itshape School of Aerospace Engineering, Georgia Institute of Technology,
     Atlanta, GA, 30332-0150, USA.}\\
@@ -82,15 +82,22 @@
 
 \begin{document}
 \maketitle
+
+
 %\abstract{}
-\section{Introduction}
-The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
-\begin{figure}[h] 
-  \centering
-  \includegraphics[width=0.5\linewidth]{iga-demo.pdf}
-  \caption{\emph{NURBS decretized quarter-plate with a hole}}
-  \label{fig:iga-demo}
-\end{figure}
+
+
+\section{Introduction and Motivation}
+Non-uniform Rational B-Splines (NURBS) \cite{Piegl:NurbsBook} are a
+popular way to represent curves and surfaces in geometry modeling. In
+other words, they provide a basis for three-dimensional euclidean
+space. In principle, they can be used to span other spaces as well,
+for example, N-dimensional vector spaces in finite element
+analysis. This realization has led to the development of isogeometric
+analysis
+(IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013}
+where the same functions used for geometry representation is also used
+to represent displacement field.
 \subsection{Importance of IGA}
 \begin{itemize}
   \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements. Whereas in IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
@@ -98,20 +105,30 @@ The main objective of the project is implementation of NURBS based Isogeometric 
   \item Due to inherent higher order continuity and exact representation of geometrical features, IGA has been shown to be advantageous in contact, fluid, structural vibration problems and more. 
   \item IGA can be applied to specific problems which have been solved with FEM to attain improved solution.
 \end{itemize}
+
 \section{Framework}
-In IGA, apart from the geometrical details(length, height, width) of a model, its parametric details such as knot vectors , the order of NURBS basis functions, and the control points are also needed to construct the exact form of discretized geometry. The evaluation of NURBS basis functions and their respective derivatives, along with their corresponding mappings are need to be done along with the enforcement procedure for different boundary conditions for NURBS defined geometry. The combinations of these complete the processing stage for the proposed implementation of IGA within the FEA structure.
+The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
+\begin{figure}[h] 
+  \centering
+  \includegraphics[width=0.5\linewidth]{iga-demo.pdf}
+  \caption{\emph{NURBS decretized quarter-plate with a hole}}
+  \label{fig:iga-demo}
+\end{figure}
+In IGA, apart from the geometrical details(length, height, width) of a
+model, its parametric details such as knot vectors , the order of
+NURBS basis functions, and the control points are also needed to
+construct the exact form of discretized geometry. The evaluation of
+NURBS basis functions and their respective derivatives, along with
+their corresponding mappings are need to be done along with the
+enforcement procedure for different boundary conditions for NURBS
+defined geometry. The combinations of these complete the processing
+stage for the proposed implementation of IGA within the FEA structure.
 
-\begin{thebibliography}{9}
-\bibitem{Agarwal} 
-Vishal Agrawal, Sachin S. Gautam.  
-\textit{IGA: A Simplified Introduction and Implementation Details for Finite Element Users}. 
-The Institution of Engineers (India), 2017.
- 
-\bibitem{Milic} 
-Predrag Mili{\'c}, Dragan Marinkovi{\'c}. 
-\textit{Isogeometric Structural Analysis based on NURBS shape functions}.
-FACTA UNIVERSITATIS, Vol. 11, ${No}$~2, 2013.
+\section{Results}
 
-\end{thebibliography}
+\section{Conclusions}
+\bibliographystyle{myabbrvnat} 
+\bibliography{references}
+
 \end{document}
 
