@@ -1,4 +1,4 @@
-\documentclass[]{aiaa-pretty} %submit, draft, journal options can be used
+\documentclass[submit,12pt]{aiaa-pretty} %submit, draft, journal options can be used
 \usepackage[belowskip=0pt, aboveskip=0pt]{subcaption}
 \usepackage{float}
 \usepackage{caption}
@@ -72,12 +72,15 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 
+% Vector arrow
+\newcommand*{\vv}[1]{\vec{\mkern0mu#1}}
+
 \graphicspath{{talk/}{talk/figures/}{figures/}}
 
-\title{Isogeometric Finite Element Analysis using Non-Uniform Rational B-Splines}
+\title{Isogeometric Finite Element Analysis Using Non-uniform Rational Bsplines}
 \author{Komahan Boopathy  and Siddarth Niranjan Babu\\
   {\normalsize\itshape School of Aerospace Engineering, Georgia Institute of Technology,
-    Atlanta, GA, 30332-0150, USA.}\\
+    Atlanta, GA, USA. } %, 30332-0150, USA.}\\
 } 
 
 \begin{document}
@@ -96,8 +99,8 @@ for example, N-dimensional vector spaces in finite element
 analysis. This realization has led to the development of isogeometric
 analysis
 (IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013}
-where the same functions used for geometry representation is also used
-to represent displacement field.
+where the same functions used for geometry representation in $\mathbb{E}^3$ is also used
+to represent displacement field in $\mathbb{R}^M$.
 \subsection{Importance of IGA}
 \begin{itemize}
   \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements. Whereas in IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
@@ -105,6 +108,18 @@ to represent displacement field.
   \item Due to inherent higher order continuity and exact representation of geometrical features, IGA has been shown to be advantageous in contact, fluid, structural vibration problems and more. 
   \item IGA can be applied to specific problems which have been solved with FEM to attain improved solution.
 \end{itemize}
+
+-- integration of geometry and analysis into a common framework
+
+
+-- Isogeometric boundary element methods for elastostatic analysis were presented in [127,118],
+demonstrating that mesh generation can be completely circumvented by using CAD discretizations for analysis.
+
+R.N. Simpson, S.P.A. Bordas, J. Trevelyan, T. Rabczuk, A two-dimensional isogeometric boundary element method for elastostatic analysis,
+Comput. Methods Appl. Mech. Engrg. 209–212 (2012) 87–100.
+
+M.A. Scott, R.N. Simpson, J.A. Evans, S. Lipton, S.P.A. Bordas, T.J.R. Hughes, T.W. Sederberg, Isogeometric boundary element analysis
+using unstructured T-splines, Comput. Methods Appl. Mech. Engrg. 254 (2013) 197–221.
 
 \section{Framework}
 The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
@@ -124,11 +139,56 @@ enforcement procedure for different boundary conditions for NURBS
 defined geometry. The combinations of these complete the processing
 stage for the proposed implementation of IGA within the FEA structure.
 
+\subsection{Representation of Curves}
+\subsubsection{BSpline Representation of Curves}
+Let $\vv{p}(u) = [x(u), y(u), z(u)]^T$ refer to the parametric
+representation of a point on a curve in three-dimensional Euclidean
+space $\mathbb{E}^3$, where $u \in [u_{min}, u_{max}]$ is a scalar
+parameter that takes a given range of values to characterize the curve. 
+Any point on the curve can be written as a linear combination:
+\begin{equation}
+  \vv{p}(u) = \sum_{i=0}^N B_{p,i}(u) \vv{P}^{i}
+\end{equation}
+where 
+\begin{enumerate}
+\item $p$ refers to the order of the $i-$th BSpline basis functions $B_{p,i}$
+\item $\vv{P}^i$ is the $i-$th control point and 
+\item $N+1$ is the number of control points
+\end{enumerate}
+Note that the order is chosen independent of the number of control
+points. The first-derivative (slope) of the curve at a parametric point $u$ is defined as:
+\begin{equation}
+  \begin{aligned}
+    \td{\vv{p}(u)}{u} := \vv{p}^u(u) & = \sum_{i=0}^N \td{B_{o,i}(u)}{u} \vv{P}^{i} = \sum_{i=0}^N B_{p,i}^{u}(u) \vv{P}^{i} 
+  \end{aligned}
+\end{equation}
+where $B_{o,i}^u(u)$ is the u-derivative of the corresponding basis
+function. Here, we simply use the fact that only the basis function is
+dependent on the parameter $u$. This naturally extends to second-order
+derivatives (curvature) as
+\begin{equation}
+  \begin{aligned}
+    \tdt{\vv{p}(u)}{u} := \vv{p}^{uu}(u) & = \sum_{i=0}^N \tdt{B_{o,i}(u)}{u} \vv{P}^{i} = \sum_{i=0}^N B_{p,i}^{uu}(u) \vv{P}^{i}
+  \end{aligned}
+\end{equation}
+The curve $\vv{p}(u)$ is differentiable as many times as ??.
+
+\paragraph{\underline{Bspline Basis Function:}}
+Now let us define the algebraic form of the Bspline basis function
+using a vector that contains a range of values for the parameters.
+
+\paragraph{\underline{Knot Vector:}}
+
+\subsubsection{NURBS Representation of Curves}
+\subsection{Representation of Surfaces}
+\subsubsection{BSpline Representation of Surfaces}
+\subsubsection{NURBS Representation of Surfaces}
+
+
 \section{Results}
 
 \section{Conclusions}
-\bibliographystyle{myabbrvnat} 
-\bibliography{references}
+\bibliographystyle{myabbrvnat} \bibliography{references}
 
 \end{document}
 
