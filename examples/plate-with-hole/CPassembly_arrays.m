@@ -9,7 +9,7 @@ function [ConnectivityCP] = CPassembly_arrays(n,p,m,q)
 nel            = (n-p)*(m-q);     % Total number of elements in the mesh
 ncp            = n*m;             % Total number of control points
 necp           = (p+1)*(q+1);     % Total number of control points in an element
-ConnectivityCP = zeros(nen, nel); % control point assembly array
+ConnectivityCP = zeros(necp, nel); % control point assembly array
 
 A = 0;                % loop counter
 e = 0;                % loop counter
@@ -30,4 +30,3 @@ for j = 1:m           % loop over CPs along eta
 end
 ConnectivityCP = sort(ConnectivityCP)';
 end
-

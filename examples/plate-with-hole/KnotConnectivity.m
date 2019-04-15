@@ -1,5 +1,5 @@
 % 2. Formation of knot vector connectivity array
-function [KnotConnectivity, SpanRangU, SpanRangV] = KnotConnectivity(n,p,m,q)
+function [KnotConnectivity, SpanRangU, SpanRangV] = KnotConnectivity(n,p,m,q,unqU,unqV)
 % Inputs
 % n : number of control points along xi direction
 % p : order of basis function along xi direction

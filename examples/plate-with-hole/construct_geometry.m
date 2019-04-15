@@ -26,5 +26,17 @@ CPArray(:,:,3) = [-L, -L, -L, 0;
 
 %% 4. Construct the NURBS described geometry
 geometry = nrbmak(CPArray, {KnotU, KnotV}); % Eq. (41)
-surf(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
+%surf(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
 %plot3(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
+
+%% 5. Connectivity Control Points
+m = size(CPArray,2)-1;
+n = size(CPArray,3)-1;
+k1=size(KnotU,1)-1-m;
+k2=size(KnotV,1)-1-n;
+ccp=CPassembly_arrays(m+1,k1-1,n+1,k2-1)
+
+%% 6. Knot Vector Connectivity array
+uniqU=unique(KnotU);
+uniqV=unique(KnotV);
+[Knotcon,spanRU,spanRV]=KnotConnectivity(m+1,k1-1,n+1,k2-1,uniqU,uniqV);
