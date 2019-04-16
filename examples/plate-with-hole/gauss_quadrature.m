@@ -1,4 +1,4 @@
-function [x, w] = gauss_quadrature(npoints, ndim)
+function [X, W] = gauss_quadrature(npoints)
 % Return the gauss quadrauture points and corresponding weights
 % https://pomax.github.io/bezierinfo/legendre-gauss.html
 if npoints == 2
@@ -15,5 +15,18 @@ elseif npoints == 5
     w = [0.5688888888888889, 0.4786286704993665, 0.4786286704993665, 0.2369268850561891, 0.2369268850561891];
 else
     error('invalid number of gauss points');
+end
+
+X = zeros(npoints,2);
+W = zeros(npoints,1);
+
+% Perform tensor product to obtain 2d grid
+ctr = 0
+for i = 1 : npoints
+    for j = 1 : npoints
+        ctr = ctr + 1
+        W(ctr)   = w(i)*w(j);
+        X(ctr,:) = [x(i), x(j)];        
+    end
 end
 end
