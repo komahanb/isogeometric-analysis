@@ -34,46 +34,8 @@
 \usepackage[numbers,compress,sort]{natbib}
 %
 \usepackage{soul,xcolor}
-\setstcolor{blue}
 
-% User defined commands
-\newcommand{\ds}{\displaystyle}
-\newcommand{\mb}{\mathbf}
-\newcommand{\mr}{\mathrm}
-\newcommand{\mbs}{\boldsymbol}
-\newcommand{\f}{\frac}
-\newcommand{\p}{\partial}
-\newcommand{\vect}[1]{\vec{\mathbf{#1}}}
-\newcommand{\ignore}[1]{}
-
-\renewcommand{\pd}[2]{\displaystyle{\dfrac{\partial #1}{\partial #2}}}
-\newcommand{\td}[2]{\dfrac{d #1}{d #2}}
-\newcommand{\pdt}[2]{\dfrac{\partial^2 #1}{\partial #2^2}}
-\newcommand{\tdt}[2]{\dfrac{d^2 #1}{d #2^2}}
-\newcommand{\pdtno}[2]{\dfrac{\partial^2 #1}{\partial #2}}
-\newcommand{\pdd}[3]{\dfrac{\partial^2 #1}{\partial #2 \partial #3}}
-\newcommand{\pff}[3]{\dfrac{d^2 #1}{d #2 d #3}}
-
-% Redefined commands
-\renewcommand\floatpagefraction{.95}
-\usepackage{cleveref}
-\crefname{subsection}{subsection}{subsections}
-
-%\newcommand{\com}[1]{\textcolor{red}{#1}}
-\newcommand{\new}[1]{{\leavevmode\color{black}{#1}}}
-\newcommand{\kb}[1]{{\leavevmode\color{blue}{#1}}}
-\newcommand{\off}[1]{}
-\newcommand{\gjk}[1]{{\leavevmode\color{Red}{#1}}}
-
-\usepackage{cmbright}
-%\usepackage{arev}
-\renewcommand\familydefault{\sfdefault} 
-
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-
-% Vector arrow
-\newcommand*{\vv}[1]{\vec{\mkern0mu#1}}
+\input{custom.tex}
 
 \graphicspath{{talk/}{talk/figures/}{figures/}}
 
@@ -86,9 +48,7 @@
 \begin{document}
 \maketitle
 
-
 %\abstract{}
-
 
 \section{Introduction and Motivation}
 Non-uniform Rational B-Splines (NURBS) \cite{Piegl:NurbsBook} are a
@@ -139,17 +99,16 @@ enforcement procedure for different boundary conditions for NURBS
 defined geometry. The combinations of these complete the processing
 stage for the proposed implementation of IGA within the FEA structure.
 
-\subsection{Representation of Curves}
-\subsubsection{NURBS Representation of Curves}
+\subsection{Parametric Representation of Curves}
 Let $\vv{p}(u) = [x(u), y(u), z(u)]^T$ refer to the parametric
 representation of a point on a curve in three-dimensional Euclidean
 space $\mathbb{E}^3$, where $u \in [u_{min}, u_{max}]$ is a scalar
 parameter that takes a given range of values to characterize the curve. 
 Any point on the curve can be written as:
 \begin{equation}
-  \vv{p}(u) := {\sum_{i=0}^n \alpha_i B_{k,i}(u) \vv{P}^{i}}/{\sum_{i=0}^n \alpha_i B_{k,i}(u)} \quad 0 \le u \le n-k+2
+  \vv{p}(u) := {\sum_{i=0}^n \alpha_i N_{k,i}(u) \vv{P}^{i}}/{\sum_{i=0}^n \alpha_i N_{k,i}(u)} \quad 0 \le u \le n-k+2
 \end{equation}
-where $k$ refers to the order of the $i-$th BSpline basis functions $B_{k,i}$, 
+where $k$ refers to the order of the $i-$th BSpline basis functions $N_{k,i}$, 
 $\vv{P}^i$ is the $i-$th control point,  $n+1$ is the number of control points
 and $\alpha_i$ is the weight associated with $i-th$ control point. 
 The inputs required  are 
@@ -199,18 +158,32 @@ where $t_i$ are the knot values defined as
 \end{equation}
 It can be seen that there are a total of $n+k+1$ knot values. We can
 implement a function $\texttt{knot\_values(n,k)}$ that computes the
-knot values with $n$ and $k$ as inputs.  The computed knot values can
+knot values with $n$ and $k$ as inputs. The computed knot values can
 be used to compute the basis function $N_{k,i}$ in a recusive manner.
 The recursion is terminated when
 \begin{equation}
-  N_{k,i}(u) = 
+  N_{0,i}(u) = 
   \begin{cases}
     1 & t_i \le u \le t_{i+1}    \\
     0 & \mathrm{otherwise} \\
   \end{cases}
 \end{equation}
 
-\subsection{Representation of Surfaces}
+\subsection{Parametric Representation of Surfaces}
+
+We extend the parametric curves to represent surfaces as
+\begin{equation}
+  \vv{p}(u_1, u_2) := \dfrac{ {\sum\limits_{i=0}^{n} \sum\limits_{j=0}^{m} \alpha_i N_{k,i}(u_1) \beta_j M_{l,j}(u_2) \vv{P}^{i,j}}} {\sum\limits_{i=0}^{n} \sum\limits_{j=0}^{m} \alpha_i N_{k,i}(u_1) \beta_j M_{l,j}(u_2)}
+\end{equation}
+with parameter range $0 \le u_1 \le n - k + 2$ and $0 \le u_2 \le n - l + 2$. 
+For ease of notation we define the following form
+\begin{equation}
+  \vv{p}(\vv{u}) := \dfrac{ {\sum \limits_{s=0}^{n \times m} \alpha_{s} N_{k,s}(\vv{u}) \vv{P}^{s}}} {\sum \limits_{s=0}^{n \times m} \alpha_{s} N_{k,s}(\vv{u})}
+\end{equation}
+
+\section{Isogeometric Analysis of Bar}
+\section{Isogeometric Analysis of Plate}
+
 
 \section{Results}
 

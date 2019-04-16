@@ -760,10 +760,6 @@
 \newcommand{\tfunction}[1]{{\footnotesize\texttt{\textbf{#1}}}}
 
 %% ----- MATH COMMANDS ---------------------------------------------------------
-% Command for Leibniz notation of derivatives
-\newcommand{\dd}[2]{\frac{d#1}{d#2}}
-% Command for Leibniz notation of partial derivatives
-\newcommand{\pd}[2]{\frac{\partial#1}{\partial#2}}
 % Command for norm
 \newcommand{\norm}[1]{\lVert#1\rVert}
 % Command for absolute value
