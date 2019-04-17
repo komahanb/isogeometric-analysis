@@ -34,9 +34,14 @@ m = size(CPArray,2)-1;
 n = size(CPArray,3)-1;
 k1=size(KnotU,1)-1-m;
 k2=size(KnotV,1)-1-n;
-ccp=CPassembly_arrays(m+1,k1-1,n+1,k2-1)
+ccp=CPassembly_arrays(m+1,k1-1,n+1,k2-1);
 
 %% 6. Knot Vector Connectivity array
 uniqU=unique(KnotU);
 uniqV=unique(KnotV);
 [Knotcon,spanRU,spanRV]=KnotConnectivity(m+1,k1-1,n+1,k2-1,uniqU,uniqV);
+
+%% 7. Jacobian Calculation
+elem_no=1; %The element for which you want to find the jacobian
+J= Jacobian_cal(CPArray,KnotU,KnotV,m,n,k1,k2,ccp,elem_no);
+
