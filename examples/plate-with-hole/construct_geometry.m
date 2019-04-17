@@ -1,5 +1,6 @@
-%% 1. Physical Model
+clc; clear all ;close all;
 
+%% 1. Physical Model
 L = 4; % length of the plate in mm
 R = 1; % radius of the hole in mm, see Fig 4
 
@@ -34,14 +35,33 @@ m = size(CPArray,2)-1;
 n = size(CPArray,3)-1;
 k1=size(KnotU,1)-1-m;
 k2=size(KnotV,1)-1-n;
-ccp=CPassembly_arrays(m+1,k1-1,n+1,k2-1);
+cconn = CPassembly_arrays(m+1,k1-1,n+1,k2-1);
 
 %% 6. Knot Vector Connectivity array
 uniqU=unique(KnotU);
 uniqV=unique(KnotV);
-[Knotcon,spanRU,spanRV]=KnotConnectivity(m+1,k1-1,n+1,k2-1,uniqU,uniqV);
+[kconn,spanRU,spanRV]=KnotConnectivity(m+1,k1-1,n+1,k2-1,uniqU,uniqV);
 
-%% 7. Jacobian Calculation
-elem_no=1; %The element for which you want to find the jacobian
-J= Jacobian_cal(CPArray,KnotU,KnotV,m,n,k1,k2,ccp,elem_no);
+% pack data into knot object
+knot.kconn  = kconn;
+knot.spanRU = spanRU;
+knot.spanRV = spanRV;
+
+%% 7. Jacobian of Transformation Calculation
+%elem_no=2; %The element for which you want to find the jacobian
+%[J, dRdxi, dRdeta]= Jacobian_cal(CPArray,KnotU,KnotV,m,n,k1,k2,cconn,elem_no)
+
+%% 8. Assemble forces and stiffness matrix
+global_conn = sort([2*cconn-1, 2*cconn]);
+num_disps = 2;                  % u and v
+num_nodes = (m+1)*(n+1);        % num nodes in the mesh (nodes are control points)
+num_elems = (m-k1+2)*(n-k2+2);  % elements in the mesh
+num_1d_gauss_points = 2;
+num_elem_nodes = 9;
+[FG, KG] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
+    global_conn, knot, num_1d_gauss_points, num_elem_nodes, ...
+    CPArray,KnotU,KnotV,m,n,k1,k2)
+
+%% 9. Apply Boundary conditions and solve
+
 

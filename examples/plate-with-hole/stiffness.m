@@ -44,8 +44,8 @@ for i = 1:nel                                 % Loop over total number of elemen
         invJ1=  inv(jacob); % inverse of J1
         
         % NURBS basis function derivatives with respect to x and y
-        drdx = [dRdxi'*dRdeta']*invJ1(:,1); %?
-        drdy = [dRdxi'*dRdeta']*invJ1(:,2); %?
+        drdx = [dRdxi' dRdeta']*invJ1(:,1); %?
+        drdy = [dRdxi' dRdeta']*invJ1(:,2); %?
         
         % Strain matrix % Equation 56
         for i2 = 1:necp % Loop over necp

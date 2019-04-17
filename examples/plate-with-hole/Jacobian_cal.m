@@ -1,10 +1,10 @@
-function [J] = Jacobian_cal(CP,KU,KV,m,n,k1,k2,ccp,elno)
+function [Jsub, dRdxisub, dRdetasub] = Jacobian_cal(CP,KU,KV,m,n,k1,k2,ccp,elno, uhat, vhat)
 syms u v
 nel=(m-k1+2)*(n-k2+2);
 %for counter=1:nel
     k=1;
-    N=basis_function(elno,KU,m)
-    M=basis_function(elno,KV,n)
+    N=basis_function(elno,KU,m);
+    M=basis_function(elno,KV,n);
     for i=1:k2
         for j=1:k1
             R(k)=N(j)*M(i);
@@ -36,4 +36,11 @@ nel=(m-k1+2)*(n-k2+2);
  J(1,2)=dxdeta;
  J(2,1)=dydxi;
  J(2,2)=dydeta;
+ 
+ Jsub = subs(J, {u, v} , [uhat, vhat]); 
+ dRdxisub = subs(dRdxi, {u, v} , [uhat, vhat]);
+ dRdetasub = subs(dRdeta, {u, v} , [uhat, vhat]);
+ Jsub =  double(Jsub);
+ dRdxisub = double(dRdxisub);
+ dRdetasub = double(dRdetasub);
 end

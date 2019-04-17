@@ -21,10 +21,10 @@ X = zeros(npoints,2);
 W = zeros(npoints,1);
 
 % Perform tensor product to obtain 2d grid
-ctr = 0
+ctr = 0;
 for i = 1 : npoints
     for j = 1 : npoints
-        ctr = ctr + 1
+        ctr = ctr + 1;
         W(ctr)   = w(i)*w(j);
         X(ctr,:) = [x(i), x(j)];        
     end
