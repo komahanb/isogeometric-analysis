@@ -3,8 +3,10 @@ syms u v
 nel=(m-k1+2)*(n-k2+2);
 %for counter=1:nel
     k=1;
-    N=basis_function(elno,KU,m);
-    M=basis_function(elno,KV,n);
+    temp=basisfun(m+1,k1-1,KU);
+    temp2=basisfun(n+1,k2-1,KV);
+    M=subs(temp2,'u','v');
+    N=temp(elno,:);
     for i=1:k2
         for j=1:k1
             R(k)=N(j)*M(i);

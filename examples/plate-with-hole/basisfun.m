@@ -1,67 +1,61 @@
-function N=basisfun(n,u,p,U)                 
-% BASISFUN  Basis function for B-Spline 
-% ------------------------------------------------------------------------- 
-% ADAPTATION of BASISFUN from C Routine 
-% ------------------------------------------------------------------------- 
-% 
-% Calling Sequence: 
-%  
-%   N = basisfun(i,u,p,U) 
-%    
-%    INPUT: 
-%    
-%      i - knot span  ( from FindSpan() ) 
-%      u - parametric point 
-%      p - spline degree 
-%      U - knot sequence 
-%    
-%    OUTPUT: 
-%    
-%      N - Basis functions vector[p+1] 
-%    
-%    Algorithm A2.2 from 'The NURBS BOOK' pg70. 
+function N=basisfun(n,p,U)  
 
-% U = [0 0 0 0.5 1 1 1]';
-% p=2;
-n=n+1;
-i=findspan(n,p,u,U);
-                                                 
-                                                  %   void basisfun(int i, double u, int p, double *U, double *N) { 
-                                                  %   int j,r; 
-                                                  %   double saved, temp; 
-i = i + 1; 
-                                                  %   // work space 
-left = zeros(p+1,1);                              %   double *left  = (double*) mxMalloc((p+1)*sizeof(double)); 
-right = zeros(p+1,1);                             %   double *right = (double*) mxMalloc((p+1)*sizeof(double)); 
-                                                
-N(1) = 1;                                         %   N[0] = 1.0; 
-for j=1:p                                         %   for (j = 1; j <= p; j++) { 
-    left(j+1) = u - U(i+1-j);                     %   left[j]  = u - U[i+1-j]; 
-    right(j+1) = U(i+j) - u;                      %   right[j] = U[i+j] - u; 
-    saved = 0;                                    %   saved = 0.0; 
- 
-    for r=0:j-1                                   %   for (r = 0; r < j; r++) { 
-        temp = N(r+1)/(right(r+2) + left(j-r+1)); %   temp = N[r] / (right[r+1] + left[j-r]); 
-        N(r+1) = saved + right(r+2)*temp;         %   N[r] = saved + right[r+1] * temp; 
-        saved = left(j-r+1)*temp;                 %   saved = left[j-r] * temp; 
-    end                                           %   } 
- 
-    N(j+1) = saved;                               %   N[j] = saved; 
-end  
-                                             %   } 
-if n==4
-if i-p == 1
-    N(n)=0;
-else
-    for i=1:n-1
-        N(n+1-i)=N(n-i);
+syms u
+unq=unique(U);
+unqlen=size(unique(U),1);
+B=sym('a',[n,p+1,unqlen-1]);
+
+for i1=1:unqlen-1
+    for i2=1:n+p+1
+        if U(i2)==unq(i1+1)
+            pos=i2-1;
+            break;
+        end
     end
-    N(1)=0;
-end   
-end
-if u==1
-    for i=1:n-1
-        N(i)=0;
+    j1=1;
+    for i2=1:pos-1 
+        B(i2,j1,i1)=0;
     end
-    N(n)=1;
+    B(pos,j1,i1)=1;
+    for i2=pos+1:n
+        B(i2,j1,i1)=0;
+    end
+    for j1=2:p+1
+        for i2=1:pos-p-1
+            B(i2,j1,i1)=0;
+        end
+        
+        for i2=pos-p:pos
+            if i2==0
+                continue;
+            end
+            if  (U(i2+j1-1)-U(i2))==0 && (U(i2+j1)-U(i2+1))==0
+                B(i2,j1,i1)=0;
+                continue;
+            
+            elseif U(i2+j1-1) - U(i2) == 0
+                B(i2,j1,i1)=(U(i2+j1)-u)/(U(i2+j1)-U(i2+1))*B(i2+1,j1-1,i1);
+                continue
+                
+            elseif U(i2+j1)- U(i2+1) == 0
+                B(i2,j1,i1)=(u-U(i2))/(U(i2+j1-1)-U(i2))*B(i2,j1-1,i1);
+                continue;
+                
+            else
+            B(i2,j1,i1)=(u-U(i2))/(U(i2+j1-1)-U(i2))*B(i2,j1-1,i1)+(U(i2+j1)-u)/(U(i2+j1)-U(i2+1))*B(i2+1,j1-1,i1);
+            end
+            
+        end
+        
+        for i2=pos+1:n
+            B(i2,j1,i1)=0;
+        end
+    end
+    
 end
+    N=sym('n',[unqlen-1,n]);
+    for i2=1:unqlen-1
+        N(i2,:)=B(:,p+1,i2);
+    end
+end
+
