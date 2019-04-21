@@ -41,10 +41,10 @@ class KnotParameter:
         b = self.bounds[1]
         
         # scale weights
-        wxi = (b-a)*wxihat/2
+        wxi = (b-a)*wxihat/2.
         
         # transformation of variables into element space
-        xi = (b-a)*xihat/2 + (b+a)/2
+        xi = (b-a)*xihat/2. + (b+a)/2.
 
         return xi, wxi
     
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         for j in range(0,3):
             xi1pts, wxi1 = xi1.get_quadrature_points_weights(3)
             for xie, we in zip(xi1pts, wxi1):
-                e1jac[i,j] += Nprime(xie,i+1,1)*Nprime(xie,j+1,1)*we/2  
+                e1jac[i,j] += Nprime(xie,i+1,xi1.enum)*Nprime(xie,j+1,xi1.enum)*we/2  
     print e1jac
 
     xi2 = KnotParameter(2, [0.5, 1.0])
@@ -71,7 +71,7 @@ if __name__ == "__main__":
         for j in range(0,3):
             xi2pts, wxi2 = xi2.get_quadrature_points_weights(3)            
             for xie, we in zip(xi2pts, wxi2):
-                e2jac[i,j] += Nprime(xie,i+1,2)*Nprime(xie,j+1,2)*we/2      
+                e2jac[i,j] += Nprime(xie,i+1,xi2.enum)*Nprime(xie,j+1,xi2.enum)*we/2      
     print e2jac
 
     print "global stiffness matrix"
@@ -95,9 +95,23 @@ if __name__ == "__main__":
     U = np.linalg.solve(K, F)
     print U
     
-    fe1 = np.zeros((3,1))    
+    fe1 = np.zeros((3))    
     for i in range(0,3):
         xi2pts, wxi2 = xi1.get_quadrature_points_weights(3)
         for xie, we in zip(xi2pts, wxi2):
-            fe1[i] += N(xie,i+1,1)*we/2            
-    print fe1
+            fe1[i] += N(xie, i+1, xi1.enum)*we*2
+    print "fe1", fe1, np.sum(fe1)
+
+    fe2 = np.zeros((3))    
+    for i in range(0,3):
+        xi2pts, wxi2 = xi2.get_quadrature_points_weights(3)
+        for xie, we in zip(xi2pts, wxi2):
+            fe2[i] += N(xie, i+1, xi2.enum)*we*2
+    print "fe2", fe2, np.sum(fe2)
+
+    F = np.zeros((4))
+    F[0] = fe1[0]
+    F[1] = fe1[1] + fe2[0]
+    F[2] = fe1[2] + fe2[1]
+    F[3] = fe2[2]
+    print F
