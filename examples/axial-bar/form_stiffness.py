@@ -4,6 +4,7 @@ import math
 import numpy as np
 np.set_printoptions(precision=4 , suppress=True)
 from basis import N, Nprime
+import matplotlib.pyplot as plt
 
 class KnotParameter:    
     """
@@ -94,6 +95,9 @@ if __name__ == "__main__":
 
     U = np.linalg.solve(K, F)
     print U
+
+
+
     
     fe1 = np.zeros((3))    
     for i in range(0,3):
@@ -115,3 +119,13 @@ if __name__ == "__main__":
     F[2] = fe1[2] + fe2[1]
     F[3] = fe2[2]
     print F
+
+
+    F = np.delete(F,0,0)
+
+    u = np.linalg.solve(K, F)
+    print u
+
+    plt.figure()
+    plt.plot(xvals[1:], u , '-o', label='')
+    plt.show()
