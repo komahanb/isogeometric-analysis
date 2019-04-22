@@ -5,10 +5,10 @@ default:
 	pdflatex isogeometric-analysis.tex
 
 talk:
-	pdflatex me7751-final-project-talk.tex
-	bibtex   me7751-final-project-talk
-	pdflatex me7751-final-project-talk.tex
-	pdflatex me7751-final-project-talk.tex
+	pdflatex isogeometric-analysis-talk.tex
+	bibtex   isogeometric-analysis-talk
+	pdflatex isogeometric-analysis-talk.tex
+	pdflatex isogeometric-analysis-talk.tex
 
 poster:
 	pdflatex isogeometric-analysis-talk.tex
