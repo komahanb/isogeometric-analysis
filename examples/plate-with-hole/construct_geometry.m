@@ -62,6 +62,12 @@ num_elem_nodes = 9;
     global_conn, knot, 2, 2, num_elem_nodes, ...
     CPArray,KnotU,KnotV,m,n,k1,k2)
 
+%% Solve applying BCs
+bc_nodes = [1, 2, 7, 8, 9, 10, 15, 16, 17, 18, 23, 24];
+[K, F] = apply_boundary_conditions(KG, FG, bc_nodes);
+U = K\F;
+
+
 %% 9. Apply Boundary conditions and solve
 
 
