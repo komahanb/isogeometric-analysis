@@ -1,16 +1,15 @@
 function [FG, KG] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
-    cconn,knot, num_1d_gauss_points, num_elem_nodes, ...
+    cconn,knot, ngpoints1, ngpoints2, num_elem_nodes, ...
     cpts, KU, KV, m, n, k1, k2)
 
-C = constitutive_matrix();
+E  = 70.0e6; % aluminium
+nu = 0.33;
+h  = 1.0;
+C = constitutive_matrix(E,nu,h);
 
 % Initialize matrix and vector
 KG     = zeros(num_disps*num_nodes, num_disps*num_nodes);
 FG     = zeros(num_disps*num_nodes,1);
-
-% Gauss points and weights for integration
-[PT, WT] = gauss_quadrature(num_1d_gauss_points);
-num_gauss_points = num_1d_gauss_points^2;
 
 for enum = 1 : num_elems
     
@@ -24,23 +23,32 @@ for enum = 1 : num_elems
     
     elU = SpanRangU(kconn(enum,1),:); % Knot span in xi
     elV = SpanRangV(kconn(enum,2),:); % Knot span in eta
-        
+    
+    % Gauss points and weights for integration
+    xia  = elU(1);
+    xib  = elU(2);
+    etaa = elV(1);
+    etab = elV(2);
+    [XI, WTXI] = gauss_quadrature(npoints1, npoints2, xia, xib,  etaa, etab);
+    num_gauss_points = ngpoints1*ngpoints2;
+
     for j = 1 : num_gauss_points
         
         % Extract poitns and weights
-        pt = PT(j,:);
-        wt = WT(j,:);
+        xivec = XI(j,:);
+        wt    = WTXI(j,:);
         
-        xitilda  = pt(1); % Parametric coord in xi
-        etatilda = pt(2); % Paramtric coord in eta
+        xi  = xivec(1) % Parametric coord in xi
+        eta = xivec(2) % Paramtric coord in eta              
         
         %% forward coordinate transformation
-        xi  = 0.5*((elU(2)-elU(1)) -  xitilda + (elU(2) + elU(1))); % Eq. 44
-        eta = 0.5*((elV(2)-elV(1)) - etatilda + (elV(2) + elV(1))); % Eq. 45      
-        dxi_dxitilda   = 0.5*(elU(2) - elU(1));
-        deta_detatilda = 0.5*(elV(2) - elV(1));
-        J2 = [dxi_dxitilda, 0; 0, deta_detatilda];
-        detJ2 = det(J2);
+        
+        % xi  = 0.5*((elU(2)-elU(1)) -  xitilda + (elU(2) + elU(1))); % Eq. 44
+        % eta = 0.5*((elV(2)-elV(1)) - etatilda + (elV(2) + elV(1))); % Eq. 45      
+        % dxi_dxitilda   = 0.5*(elU(2) - elU(1));
+        % deta_detatilda = 0.5*(elV(2) - elV(1));
+        % J2 = [dxi_dxitilda, 0; 0, deta_detatilda];
+        % detJ2 = det(J2);
         
         %% Get the first jacobian
         [J1, dRdxi, dRdeta] = Jacobian_cal(cpts,KU,KV,m,n,k1,k2,cconn, enum, xi, eta);
@@ -62,7 +70,7 @@ for enum = 1 : num_elems
         end
         
         % Forming local stiffness matrix Ke
-        Ke = Ke + B'*C*B*detJ1*detJ2*wt;
+        Ke = Ke + B'*C*B*detJ1*wt;
     
     end
     
