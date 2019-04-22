@@ -29,7 +29,7 @@ for enum = 1 : num_elems
     xib  = elU(2);
     etaa = elV(1);
     etab = elV(2);
-    [XI, WTXI] = gauss_quadrature(npoints1, npoints2, xia, xib,  etaa, etab);
+    [XI, WTXI] = gauss_quadrature(ngpoints1, ngpoints2, xia, xib,  etaa, etab);
     num_gauss_points = ngpoints1*ngpoints2;
 
     for j = 1 : num_gauss_points
@@ -38,8 +38,8 @@ for enum = 1 : num_elems
         xivec = XI(j,:);
         wt    = WTXI(j,:);
         
-        xi  = xivec(1) % Parametric coord in xi
-        eta = xivec(2) % Paramtric coord in eta              
+        xi  = xivec(1); % Parametric coord in xi
+        eta = xivec(2); % Paramtric coord in eta              
         
         %% forward coordinate transformation
         
@@ -73,11 +73,10 @@ for enum = 1 : num_elems
         Ke = Ke + B'*C*B*detJ1*wt;
     
     end
+    % Assemble from the local to global matricies where CnCPe corresponds
+    % to the global row and column number of the global stiffness matrix
+    KG(cconn(enum,:),cconn(enum,:))= KG(cconn(enum,:),cconn(enum,:)) + Ke;
     
 end % loop elements
-
-% Assemble from the local to global matricies where CnCPe corresponds
-% to the global row and column number of the global stiffness matrix
-KG(cconn(enum,:),cconn(enum,:))= KG(cconn(enum,:),cconn(enum,:)) + Ke;
     
 end % function
