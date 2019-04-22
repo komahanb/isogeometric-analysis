@@ -7,10 +7,45 @@ nu = 0.33;
 h  = 1.0;
 C = constitutive_matrix(E,nu,h);
 
-% Initialize matrix and vector
-KG     = zeros(num_disps*num_nodes, num_disps*num_nodes);
-FG     = zeros(num_disps*num_nodes,1);
 
+%% Assembly
+% Assemble force
+
+% take this as input
+tvec= zeros(2,1);
+tvec(1) = 10;
+
+FG     = zeros(num_disps*num_nodes,1);
+for enum = 1 : num_elems
+    
+    Fe = zeros(num_disps*num_elem_nodes, 1);
+    
+    kconn     = knot.kconn;    
+    SpanRangV = knot.spanRV;          
+    elV = SpanRangV(kconn(enum,2),:); % Knot span in eta    
+    etaa = elV(1);
+    etab = elV(2);
+    [etas, wts] = gauss_quadrature_1d(npoints2, etaa, etab);
+        
+    % loop gauss points
+      for j = 1 : npoints2
+        
+        % Extract poitns and weights        
+        wt  = wts(j);
+        eta = etas(j);
+        
+        [J1, R, ~, ~] = Jacobian_cal(cpts,KU,KV,m,n,k1,k2,cconn, enum, 0.0, eta);
+        detJ1 = det(J1);      
+        
+        % Forming local stiffness matrix Ke
+        Fe = Fe + R*tvec*wt/detJ1;
+        
+      end
+      
+end
+
+% Assemble stiffness
+KG     = zeros(num_disps*num_nodes, num_disps*num_nodes);
 for enum = 1 : num_elems
     
     % Initialize element matrices and vectors
@@ -29,7 +64,7 @@ for enum = 1 : num_elems
     xib  = elU(2);
     etaa = elV(1);
     etab = elV(2);
-    [XI, WTXI] = gauss_quadrature(ngpoints1, ngpoints2, xia, xib,  etaa, etab);
+    [XI, WTXI] = gauss_quadrature_2d(ngpoints1, ngpoints2, xia, xib,  etaa, etab);
     num_gauss_points = ngpoints1*ngpoints2;
 
     for j = 1 : num_gauss_points
@@ -51,7 +86,7 @@ for enum = 1 : num_elems
         % detJ2 = det(J2);
         
         %% Get the first jacobian
-        [J1, dRdxi, dRdeta] = Jacobian_cal(cpts,KU,KV,m,n,k1,k2,cconn, enum, xi, eta);
+        [J1, ~, dRdxi, dRdeta] = Jacobian_cal(cpts,KU,KV,m,n,k1,k2,cconn, enum, xi, eta);
         detJ1 = det(J1); % Eq 50
         invJ1=  inv(J1); % inverse of J1
         

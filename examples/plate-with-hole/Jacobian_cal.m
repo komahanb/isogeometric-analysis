@@ -1,4 +1,4 @@
-function [Jsub, dRdxisub, dRdetasub] = Jacobian_cal(CP,KU,KV,m,n,k1,k2,ccp,elno, uhat, vhat)
+function [Jsub, R, dRdxisub, dRdetasub] = Jacobian_cal(CP,KU,KV,m,n,k1,k2,ccp,elno, uhat, vhat)
 syms u v
 nel=(m-k1+2)*(n-k2+2);
 %for counter=1:nel
