@@ -1,4 +1,4 @@
-function [X, W] = gauss_quadrature_1d(npoints1, xia, xib)
+function [xi, wxi] = gauss_quadrature_1d(npoints1, xia, xib)
 % Return the gauss quadrauture points and corresponding weights
 % https://pomax.github.io/bezierinfo/legendre-gauss.html
 %

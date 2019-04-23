@@ -58,14 +58,22 @@ num_nodes = (m+1)*(n+1);        % num nodes in the mesh (nodes are control point
 num_elems = (m-k1+2)*(n-k2+2);  % elements in the mesh
 num_1d_gauss_points = 2;
 num_elem_nodes = 9;
-[FG, KG] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
+[KG, B, C] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
     global_conn, knot, 2, 2, num_elem_nodes, ...
-    CPArray,KnotU,KnotV,m,n,k1,k2)
+    CPArray,KnotU,KnotV,m,n,k1,k2);
+FG = zeros(24,1);
+FG(17)=10;
 
 %% Solve applying BCs
-bc_nodes = [1, 2, 7, 8, 9, 10, 15, 16, 17, 18, 23, 24];
+bc_nodes = [2, 7, 10, 15, 18, 23];
 [K, F] = apply_boundary_conditions(KG, FG, bc_nodes);
 U = K\F;
+% ue1=[0,0,U(1),U(2),U(3),U(4),0,0,U(5),U(6),U(7),U(8),0,0,U(9),U(10),U(11),U(12)];
+% ue2=[U(1),U(2),U(3),U(4),0,0,U(5),U(6),U(7),U(8),0,0,U(9),U(10),U(11),U(12),0,0];
+% strainelem1=B(:,:,1)*ue1';
+% stresselem1=C*strainelem1;
+% strainelem2=B(:,:,2)*ue2';
+% stresselem2=C*strainelem2;
 
 
 %% 9. Apply Boundary conditions and solve

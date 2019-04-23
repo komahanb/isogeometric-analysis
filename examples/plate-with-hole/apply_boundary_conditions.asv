@@ -4,6 +4,7 @@ F = fvec;
 k=0;
 numbcs = size(bc_dofs,2);
 for i = 1: numbcs
+    if(bc_dofs(i)==)
     K(:,bc_dofs(i)-k) = [];
     K(bc_dofs(i)-k,:) = [];
     F(bc_dofs(i)-k) = [];
