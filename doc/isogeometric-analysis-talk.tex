@@ -13,6 +13,7 @@
   \setbeamerfont{subsection in toc}{series=\bfseries}
   \setbeamerfont{subsection in toc}{size=\tiny,series=\bfseries}
 }
+%\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%                       Packages                           %%%
@@ -156,10 +157,35 @@ $\rightarrow$ One can reasonably expect to have to compute the output function o
 
 \section{Isogeometric Analysis of 1D-Bar}
 \begin{frame}[allowframebreaks] \frametitle{Isogeometric Bar Analysis}
+
   content
+
   \newpage
-  content
+
+  %  \begin{block}{basis}
+  \begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-functions.pdf} \\
+    \centering \footnotesize{shapes}
+  \end{minipage}
+  \begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-function-derivatives.pdf} \\
+    \centering \footnotesize{derivatives}
+  \end{minipage}
+  \begin{equation}\nonumber
+    \begin{aligned}
+       & \textcolor{blue}{\text{element 1 [0,0.5]}}  & & \textcolor{blue}{\text{element 2 [0.5,1]}} \\
+      N_1^1(\xi) &=  (2 \xi -1)^2 & N_1^2(\xi) &= (2\xi-2)(\xi-1)  \\
+      N_2^1(\xi) &= -2\xi(3\xi-2) &N_2^2(\xi) &= -6\xi^2 + 8\xi -2 \\
+      N_3^1(\xi) &=  2\xi^2       & N_3^2(\xi) &= (2\xi -1)^2 \\
+    \end{aligned}
+  \end{equation}
+  % \end{block}
+
+
   \newpage
+
+
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
