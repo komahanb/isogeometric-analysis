@@ -191,13 +191,15 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Isogeometric Analysis of 2D-Plate}
+\begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth,height=0.6\textheight]{figures/plate2.png} \\
+    \centering \label{Underformed Plate}
+  \end{minipage}
+  \begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth,height=0.6\textheight]{figures/plate_elems.PNG} \\
+    \centering \label{Deformed Plate}
+  \end{minipage}
 \begin{itemize}
-    \begin{center}
-    \begin{figure}
-    \includegraphics[width=5.8cm, height=5cm]{figures/plate2.png}
-    \label{Plate}
-    \end{figure}
-    \end{center}
     \item A plate of L=8 and W=8 with a circular hole is subjected to in-plane concentrated load.
 
     \item The geometry can be simplified to a quarter plate due to its symmetry. It is modeled using NURBS with 12 control points.
@@ -212,7 +214,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
         R_{1,y} & 0 &R_{1,x} &  R_{2,y} & \dots &  R_{9,y} &R_{9,x}
         \end{bmatrix}
     \end{equation*}
-    \item B matrix is then used evaluate the element stiffness and force matrix and tr
+    \item B matrix is then used evaluate the element stiffness matrix and force vector with the weak formulation.
     \begin{equation*}
         \int_{\Omega^e} (B^TCB  \,d\Omega)\,u = \int_{\Gamma^e_t} R.t \,d\Gamma +\int_{\Omega^e} R.f \,d\Omega
     \end{equation*}
