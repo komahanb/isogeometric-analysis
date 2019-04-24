@@ -1,4 +1,4 @@
-clc; clear all ;close all;
+clear all ;close all;
 
 %% 1. Physical Model
 L = 4; % length of the plate in mm
@@ -27,8 +27,15 @@ CPArray(:,:,3) = [-L, -L, -L, 0;
 
 %% 4. Construct the NURBS described geometry
 geometry = nrbmak(CPArray, {KnotU, KnotV}); % Eq. (41)
-%surf(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
+surf(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
 %plot3(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
+colormap winter;
+hold on;
+plot(CPArray(1,:,1),CPArray(2,:,1),'-k*','MarkerSize',10,'Color',[1,0,0],'LineWidth',2);
+hold on;
+plot(CPArray(1,:,2),CPArray(2,:,2),'-k*','MarkerSize',10,'Color',[1,0,0],'LineWidth',2);
+hold on;
+plot(CPArray(1,:,3),CPArray(2,:,3),'-k*','MarkerSize',10,'Color',[1,0,0],'LineWidth',2);
 
 %% 5. Connectivity Control Points
 m = size(CPArray,2)-1;
@@ -58,16 +65,44 @@ num_nodes = (m+1)*(n+1);        % num nodes in the mesh (nodes are control point
 num_elems = (m-k1+2)*(n-k2+2);  % elements in the mesh
 num_1d_gauss_points = 2;
 num_elem_nodes = 9;
-[FG, KG] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
-    global_conn, knot, 2, 2, num_elem_nodes, ...
-    CPArray,KnotU,KnotV,m,n,k1,k2)
+[KG, B, C] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
+    global_conn, knot, 4, 4, num_elem_nodes, ...
+    CPArray,KnotU,KnotV,m,n,k1,k2);
+FG = zeros(24,1);
+FG(17)=-100;
 
 %% Solve applying BCs
-bc_nodes = [1, 2, 7, 8, 9, 10, 15, 16, 17, 18, 23, 24];
+bc_nodes = [2, 7, 10, 15, 18, 23];
 [K, F] = apply_boundary_conditions(KG, FG, bc_nodes);
 U = K\F;
+k4=1;
+for i1=1:2*(m+1)*(n+1)
+    if ismember(i1,bc_nodes)
+        U1(i1)=0;
+    else
+        U1(i1)=U(k4);
+        k4=k4+1;
+    end
+end
 
-
-%% 9. Apply Boundary conditions and solve
-
-
+%% Plotting deformed Plate
+CParray2=CPArray;
+k5=1;
+k6=2;
+for k3=1:n+1
+    for k4=1:m+1
+        CParray2(1,k4,k3)=CPArray(1,k4,k3)+U1(k5);
+        CParray2(2,k4,k3)=CPArray(2,k4,k3)+U1(k6);
+        k5=k5+2;
+        k6=k6+2;
+    end
+end
+geometry2 = nrbmak(CParray2, {KnotU, KnotV});
+figure;
+surf(geometry2(:,:,1),geometry2(:,:,2),geometry2(:,:,3))
+hold on;
+plot(CParray2(1,:,1),CParray2(2,:,1),'-k*','MarkerSize',10,'Color',[0,1,0],'LineWidth',2);
+hold on;
+plot(CParray2(1,:,2),CParray2(2,:,2),'-k*','MarkerSize',10,'Color',[0,1,0],'LineWidth',2);
+hold on;
+plot(CParray2(1,:,3),CParray2(2,:,3),'-k*','MarkerSize',10,'Color',[0,1,0],'LineWidth',2);

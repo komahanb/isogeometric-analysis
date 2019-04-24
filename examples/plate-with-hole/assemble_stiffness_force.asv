@@ -107,6 +107,7 @@ for enum = 1 : num_elems
     % Assemble from the local to global matricies where CnCPe corresponds
     % to the global row and column number of the global stiffness matrix
     KG(cconn(enum,:),cconn(enum,:))= KG(cconn(enum,:),cconn(enum,:)) + Ke;
+    Ke;
 end % loop elements
     
 end % function
