@@ -6,14 +6,14 @@ nel=(m-k1+2)*(n-k2+2);
     temp2=basisfun(n+1,k2-1,KV);
     M=subs(temp2,'u','v');
     N=temp(elno,:);
-    denom=sym('d');
-    denom=0;
-    for i1=1:n+1
-        for j5=1:m+1
-            denom=denom+simplify(N(j5)*M(i1)*CP(4,j5,i1));
-        end
-    end
-    denom =1;
+%     denom=sym('d');
+%     denom=0;
+%     for i1=1:n+1
+%         for j5=1:m+1
+%             denom=denom+simplify(N(j5)*M(i1)*CP(4,j5,i1));
+%         end
+%     end
+    denom=1;
     if elno==1
         R=[N(1)*M(1)*CP(4,1,1)/denom; N(2)*M(1)*CP(4,2,1)/denom; N(3)*M(1)*CP(4,3,1)/denom;N(1)*M(2)*CP(4,1,2)/denom; N(2)*M(2)*CP(4,2,2)/denom; N(3)*M(2)*CP(4,3,2)/denom; N(1)*M(3)*CP(4,1,3)/denom; N(2)*M(3)*CP(4,2,3)/denom; N(3)*M(3)*CP(4,3,3)/denom]';
     else
