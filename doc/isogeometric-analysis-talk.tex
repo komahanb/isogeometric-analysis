@@ -103,27 +103,19 @@
 
   \begin{itemize}
 
-  \item Computational methods have been playing an increasingly important role in science and engineering
-    analysis and design over the last several decades
+  \item Finite Element Analysis is one of the most popular numerical methods to find approximate solution of PDEs.
 
-  \item In spite of the rapid advances and acceptance of numerical simulations, serious deficiencies 
-    remain in terms of accuracy, uncertainty, and validation for many applications
-
-  \item Uncertainty analysis is important since high fidelity computations typically 
-    assume perfect knowledge of all parameters. In reality there is much uncertainty due to
-    \begin{itemize}
-    \item manufacturing tolerances
-    \item in-service wear-and-tear
-    \item approximate modeling parameters
-    \end{itemize}
+  \item FEA has wide applications in various fields but there is substantial bottleneck between the CAD and FEA fields.
+  
+  \item Isogeometric analysis simplifies the transition of exact CAD models into analysis and alleviates the issues originating from geometric discontinuities.
+  
+  \item IGA significantly reduces the design-to-analysis time in comparison to traditional FEA
+  
+  \item Its fundamental concept is to utilize NURBS not only for the construction of CAD model, but is also used for its mathematical analysis.
 
 \newpage
 
-\item Use of surrogate models for both uncertainty quantification and global optimizations has become popular
-  \begin{itemize}
-  \item Replace expensive function evaluations with an approximate but inexpensive functional representation
-  \item Can be probed exhaustively for global optimization or uncertainty analysis
-  \end{itemize}
+
 
 \item An efficient gradient evaluation method based on adjoint formulations has been adopted by the computational community over the last several decades
 
@@ -131,18 +123,23 @@
 
 \newpage
 
-\item An efficient Hessian evaluation method has been developed in our group and we try to utilize the Hessian and gradient information
-to counteract the ``curse of dimensionality'':
-
-\begin{itemize}
-
-\item For a single output objective, the effort for computing the full gradient is typically comparable to the effort of computing the objective function itself
-
-\item As the number of inputs, $M$, increases, using the output function and its derivative provides \mbox{$M+1$} pieces of information for roughly the cost of two function evaluations
-
-\item Similarly, the Hessian provides \mbox{$M \cdot (M+1)/2$} pieces of information for roughly the cost of $M$ function evaluations
-
-\end{itemize}
+\begin{center}
+\begin{tabular}{cc}
+\hline
+\hline
+ \multicolumn{2}{c}{Differences}\\
+\hline
+ \footnotesize{FEA} & \footnotesize{IGA} \\
+\hline 
+ \footnotesize{Nodal Points} & \footnotesize{Control Points} \\
+ \footnotesize{Nodal Variables} & \footnotesize{Control Variable}\\
+ \footnotesize{Mesh} & \footnotesize{Knots} \\
+ \footnotesize{Approximate Geometry} & \footnotesize{Exact Geometry}\\
+ \footnotesize{Polynomial Basis} & \footnotesize{NURBS Basis} \\
+\hline
+\hline
+\end{tabular}
+\end{center}
 
 $\rightarrow$ One can reasonably expect to have to compute the output function overall far fewer times to obtain a good surrogate model when using gradient and Hessian information
 
@@ -226,11 +223,11 @@ $\rightarrow$ One can reasonably expect to have to compute the output function o
   \end{itemize}
   \newpage
   \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.2\textwidth]{doc/figures/undeformed_plate.png} \\
+    \includegraphics[width=1.0\textwidth]{doc/figures/undeformed_plate.png} \\
     \centering \label{Underformed Plate}
   \end{minipage}
   \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.2\textwidth]{doc/figures/deformed_plate.png} \\
+    \includegraphics[width=1.0\textwidth]{doc/figures/deformed_plate.png} \\
     \centering \label{Deformed Plate}
   \end{minipage}
   \begin{itemize}
