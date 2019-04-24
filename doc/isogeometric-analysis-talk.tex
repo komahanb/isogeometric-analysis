@@ -114,15 +114,19 @@
   \item Its fundamental concept is to utilize NURBS not only for the construction of CAD model, but is also used for its mathematical analysis.
 
 \newpage
-
-
-
-\item An efficient gradient evaluation method based on adjoint formulations has been adopted by the computational community over the last several decades
-
-  $\rightarrow$ Introduction of gradient information within surrogate models has also attracted attention
+\begin{figure}
+    \begin{center}
+    \includegraphics[width=6cm]{figures/exact_vs_fem.PNG}
+    \end{center}
+    \label{geometry_exact_fem}
+\end{figure}
+The geometry is described as\\~\\
+FEM $\rightarrow$ $x^e=\sum_{i=1}^{n^e}L_ix_i$; \; \; \; \; IGA $\rightarrow$ $x^e=\sum_{i=1}^{n^e_{cp}}R_iP_i$ \\~\\
+where, \\
+$L_i$ $\rightarrow$ Lagrangian Basis used to represent element in FEM \\
+$R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 
 \newpage
-
 \begin{center}
 \begin{tabular}{cc}
 \hline
@@ -144,7 +148,6 @@
 $\rightarrow$ One can reasonably expect to have to compute the output function overall far fewer times to obtain a good surrogate model when using gradient and Hessian information
 
 \end{itemize}
-
 \end{frame}
 
 
