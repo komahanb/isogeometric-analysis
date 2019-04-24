@@ -193,13 +193,48 @@ $\rightarrow$ One can reasonably expect to have to compute the output function o
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Isogeometric Analysis of 2D-Plate}
-\begin{frame}[allowframebreaks] \frametitle{Isogeometric Plate Analysis}
-  content
+    \begin{figure}
+    \begin{center}
+    \includegraphics[width=4cm]{figures/plate2.png}
+    \end{center}
+    \caption{A plate with a hole}\label{Plate}
+\end{figure}
+  \begin{itemize}
+    \item A plate of L=8 and W=8 with a circular hole is subjected to in-plane concentrated load.
+
+    \item The geometry can be simplified to a quarter plate due to its symmetry as shown in Fig. \ref{Plate}. It is modeled using NURBS with 12 control points.
+
+  \end{itemize}
   \newpage
-  content
+  \begin{itemize}
+    \item Divided the geometry into 2 elements and obtained connectivity arrays.
+    \item Evaluated the NURBS basis function and its derivatives for all the gauss integration points to obtain strain displacement matrix.
+    \begin{equation*}
+        B=\begin{bmatrix}
+        R_{1,x} & 0 & R_{2,x} & 0 & \dots & R_{9,x} & 0\\
+        0 & R_{1,y} & 0 &R_{2,y} & \dots & 0 & R_{9,y}\\
+        R_{1,y} & 0 &R_{1,x} &  R_{2,y} & \dots &  R_{9,y} &R_{9,x}
+        \end{bmatrix}
+    \end{equation*}
+    \item B matrix is then used evaluate the element stiffness and force matrix and tr
+    \begin{equation*}
+        \int_{\Omega^e} (B^TCB  \,d\Omega)\,u = \int_{\Gamma^e_t} R.t \,d\Gamma +\int_{\Omega^e} R.f \,d\Omega
+    \end{equation*}
+
+    \item Assembled the element stiffness and force matrices into the global matrices using connectivity arrays.
+    
+  \end{itemize}
+  \newpage
+  \begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-functions.pdf} \\
+    \centering \footnotesize{shapes}
+  \end{minipage}
+  \begin{minipage}[b]{0.48\linewidth}
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-function-derivatives.pdf} \\
+    \centering \footnotesize{derivatives}
+  \end{minipage}
   \newpage
 \end{frame}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Concluding remarks
