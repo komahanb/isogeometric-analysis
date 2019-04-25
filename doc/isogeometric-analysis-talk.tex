@@ -20,7 +20,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{multimedia}
 \usepackage{multirow}
-
+\usepackage{xcolor}
 
 % Define commands 
 
@@ -158,8 +158,9 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 
 \section{Isogeometric Analysis of 1D-Bar}
 \begin{frame}[allowframebreaks] \frametitle{Isogeometric Bar Analysis}
-  Deformation of a vertical bar under self weight
 
+  \begin{columns}
+  \begin{column}[b]{0.78\linewidth}
   \begin{block}{Governing Equation}
     \begin{equation}\nonumber
       \pd{}{x} \left( EA \pd{u(x)}{x} \right) - \rho g  = 0
@@ -169,37 +170,46 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
   
   \begin{block}{Solution Form}
     \begin{equation}\nonumber
-      u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i  \quad \mathrm{and} \quad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i
+      u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i, \quad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i
     \end{equation}
     $N_{i,p}(x)$ --  NURBS basis functions, $U_i$ -- control points
   \end{block}
+  \end{column}
+  \begin{column}[b]{0.2\linewidth}
+    Deformation of bar  under weight
+    \includegraphics[width=\textwidth]{figures/bar-setup.pdf} 
+  \end{column}
+  \end{columns}
+
+  \newpage
 
   \begin{block}{Projection (Galerkin) in Vector Space}
     \begin{equation}\nonumber
-      \left\langle  N_{j,p}(x) \bigg\vert \pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right] \right\rangle  =
-      \left\langle N_{j,p}(x) \bigg\vert \rho g \right\rangle 
+      \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
+      \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle 
     \end{equation}
   \end{block}
   \begin{block}{Integrating by parts on LHS}
     \begin{equation}\nonumber
       \begin{gathered}
-        N_{j,p}(x) EA \pd{u(x)}{x}  \bigg\vert_{x_a}^{x_b} +  \left\langle \pd{N_{j,p}(x)}{x}  \bigg\vert  EA  \pd{N_{i,p}(x)}{x}  U_i   \right\rangle \\
+        {{N_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b} +  \left\langle {\color{red}{\pd{N_{j,p}(x)}{x}}}  \bigg\vert  {\color{blue}{EA  \pd{N_{i,p}(x)}{x}  U_i}}   \right\rangle \\
         = \\
-        \left\langle N_{j,p}(x) \bigg\vert \rho g \right\rangle \quad \forall j = 1, \ldots,m
+        \left\langle {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle \quad \forall j = 1, \ldots,m
       \end{gathered}
     \end{equation}
   \end{block}
 
   \begin{itemize}
     \item The element matrices and force vector are
+
 \begin{scriptsize}
   \begin{equation}\nonumber
     \setlength\arraycolsep{1.5pt}
     {EA}
     \begin{bmatrix}
-      \left \langle N_1^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_1^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_1^\prime(x) \vert N_m^\prime(x) \right \rangle \\
-      \left \langle N_2^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_2^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_2^\prime(x) \vert N_m^\prime(x) \right \rangle \\
-      \left \langle N_3^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_3^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_3^\prime(x) \vert N_m^\prime(x) \right \rangle \\
+      \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
+      \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
+      \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
     \end{bmatrix}
     \begin{Bmatrix}
       U_1 \\
@@ -207,16 +217,17 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       U_3 \\
     \end{Bmatrix}=
     \begin{Bmatrix}
-      \left \langle N_1(x) \vert \rho g \right \rangle \\
-      \left \langle N_2(x) \vert \rho g \right \rangle \\
-      \left \langle N_3(x) \vert \rho g \right \rangle \\ 
+      \left \langle {\color{red}{N_1(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
+      \left \langle {\color{red}{N_2(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
+      \left \langle {\color{red}{N_3(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\ 
     \end{Bmatrix}    
   \end{equation}
 \end{scriptsize}
+
 \item Evaluation of  inner product
   \begin{equation}\nonumber
     \begin{aligned}
-      \underset{\text{inner~product}}{\left\langle f^x(x) \big\vert g^x(x) \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b} f^x(x) g^x(x) ~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x f^x(x_k) g^x(x_k)}\\
+      \underset{\text{inner~product}}{\left\langle {\color{red}{f^x(x)}} \big\vert  {\color{blue}{g^x(x)}} \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b}  {\color{red}{f^x(x)}}  {\color{blue}{g^x(x)}}~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x  {\color{red}{f^x(x_k)}}  {\color{blue}{g^x(x_k)}}}\\
     \end{aligned}
   \end{equation}  
 
@@ -267,6 +278,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 % Analysis of plate
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
 \section{Isogeometric Analysis of 2D-Plate}
 \begin{minipage}[b]{0.48\linewidth}
     \includegraphics[width=1.0\textwidth,height=0.6\textheight]{figures/plate2.png} \\
@@ -308,7 +320,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
     \centering \label{Deformed Plate}
   \end{minipage}
       \item The nodal displacement vector is obtained using the following equation.
-      \item $ [K^G]$\{U\}=$\{F^G\}$ 
+      \item $ [K^G] \{U\} = \{F^G\}$ 
       \item The displacements are then added to the control points and the new control points are then used to plot the deformed plate.
 \end{itemize}
 
@@ -327,10 +339,8 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       \item This minimizes the computational cost
       \item Utilizing exact geometry in analysis provide accurate results than FEA. 
       \item Multi-patch B-spline modelling of intricate shapes ia very difficult task.
-      \item Irrespective of the degree of basis function or no. of elements, FEA gives exact solution at node, but not IGA because of non-interpolation of B-spline control points
-      
+      \item Irrespective of the degree of basis function or no. of elements, FEA gives exact solution at node, but not IGA because of non-interpolation of B-spline control points      
   \end{itemize}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
