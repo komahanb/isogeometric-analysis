@@ -266,14 +266,14 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Analysis of plate
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \section{Isogeometric Analysis of 2D-Plate}
+\begin{frame}[allowframebreaks] \frametitle{Isogeometric Plate Analysis}
 \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.0\textwidth,height=0.6\textheight]{figures/plate2.png} \\
+    \includegraphics[width=1.0\textwidth,height=0.54\textheight]{figures/plate2.png} \\
     \centering \label{Underformed Plate}
   \end{minipage}
   \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.0\textwidth,height=0.6\textheight]{figures/plate_elems.PNG} \\
+    \includegraphics[width=1.0\textwidth,height=0.54\textheight]{figures/plate_elems.PNG} \\
     \centering \label{Deformed Plate}
   \end{minipage}
 \begin{itemize}
@@ -284,6 +284,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
   
     \item Divided the geometry into 2 elements and obtained connectivity arrays.
     \item Evaluated the NURBS basis function and its derivatives for all the gauss integration points to obtain strain displacement matrix.
+    \begin{block}{Strain-Displacement matrix}
     \begin{equation*}
         B=\begin{bmatrix}
         R_{1,x} & 0 & R_{2,x} & 0 & \dots & R_{9,x} & 0\\
@@ -291,27 +292,32 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
         R_{1,y} & 0 &R_{1,x} &  R_{2,y} & \dots &  R_{9,y} &R_{9,x}
         \end{bmatrix}
     \end{equation*}
+    \end{block}
     \item B matrix is then used evaluate the element stiffness matrix and force vector with the weak formulation.
+    \begin{block}{Weak Formulation}
     \begin{equation*}
         \int_{\Omega^e} (B^TCB  \,d\Omega)\,u = \int_{\Gamma^e_t} R.t \,d\Gamma +\int_{\Omega^e} R.f \,d\Omega
     \end{equation*}
+    \end{block}
     \item Assembled the element stiffness and force matrices into the global matrices using connectivity arrays.
-
+    \item The nodal displacement vector is obtained using the following equation.
+      \begin{block}{Global System of Equations}
+      \begin{equation}
+          [K^G]\{U^{cp}\}=\{F^{G}\}
+      \end{equation}
+      \end{block}
       \newpage
   
   \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.0\textwidth,height=0.5\textheight]{figures/undeformed_plate.png} \\
+    \includegraphics[width=1.0\textwidth,height=0.55\textheight]{figures/undeformed_plate.png} \\
     \centering \label{Underformed Plate}
   \end{minipage}
   \begin{minipage}[b]{0.48\linewidth}
-    \includegraphics[width=1.0\textwidth,height=0.5\textheight]{figures/deformed_plate.png} \\
+    \includegraphics[width=1.0\textwidth,height=0.55\textheight]{figures/deformed_plate.png} \\
     \centering \label{Deformed Plate}
   \end{minipage}
-      \item The nodal displacement vector is obtained using the following equation.
-      \item $ [K^G]$\{U\}=$\{F^G\}$ 
-      \item The displacements are then added to the control points and the new control points are then used to plot the deformed plate.
+  \item The displacements are then added to the control points and the new control points are then used to plot the deformed plate.
 \end{itemize}
-
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -331,6 +337,17 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       
   \end{itemize}
 
+\end{frame}
+\newpage
+\begin{frame}{Future Work}
+\begin{itemize}
+    \item Visualize stresses and strains in the model.
+    \item Use IGA for complex geometries to see its benefits.
+    \item Include knot insertion algorithm to extend it for any number of elements.
+    \item Extend the code for 3D models.
+    
+\end{itemize}
+    
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
