@@ -183,7 +183,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 
   \newpage
 
-  \begin{block}{Projection (Galerkin) in Vector Space}
+  \begin{block}{Projection (Galerkin) in Function Space}
     \begin{equation}\nonumber
       \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
       \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle 
@@ -343,7 +343,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       \item Coupling of CAD and analysis solvers reduces the burden of mesh regeneration.
       \item This minimizes the computational cost
       \item Utilizing exact geometry in analysis provide accurate results than FEA. 
-      \item Multi-patch B-spline modelling of intricate shapes ia very difficult task.
+      \item Multi-patch B-spline modelling of intricate shapes is a difficult task.
       \item Irrespective of the degree of basis function or no. of elements, FEA gives exact solution at node, but not IGA because of non-interpolation of B-spline control points      
   \end{itemize}
 \end{frame}
@@ -363,8 +363,12 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 % References and question
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-  
+\begin{frame}\frametitle{References}
+  \begin{itemize}
+      \item V. Agarwal and S. Gautam. IGA: A Simplified Introduction and Implementation Details for Finite Element Users
+      \item S. Gondegaon and H. Voruganti. Static Structural and Modal Analysis using IsoGeometric Analysis
+      \item L. Piegl and W. Tiller. The NURBS Book. Second edition. 
+  \end{itemize}
   % git repo link  
   \begin{columns}
     \column{6cm}
