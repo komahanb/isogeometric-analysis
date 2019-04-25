@@ -158,9 +158,73 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
 
 \section{Isogeometric Analysis of 1D-Bar}
 \begin{frame}[allowframebreaks] \frametitle{Isogeometric Bar Analysis}
+  Deformation of a vertical bar under self weight
 
-  content
+  \begin{block}{Governing Equation}
+    \begin{equation}\nonumber
+      \pd{}{x} \left( EA \pd{u(x)}{x} \right) - \rho g  = 0
+    \end{equation}
+    $E$ -- Young's modulus, $A$ -- Area of cross section
+  \end{block}
+  
+  \begin{block}{Solution Form}
+    \begin{equation}\nonumber
+      u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i  \quad \mathrm{and} \quad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i
+    \end{equation}
+    $N_{i,p}(x)$ --  NURBS basis functions, $U_i$ -- control points
+  \end{block}
 
+  \begin{block}{Projection (Galerkin) in Vector Space}
+    \begin{equation}\nonumber
+      \left\langle  N_{j,p}(x) \bigg\vert \pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right] \right\rangle  =
+      \left\langle N_{j,p}(x) \bigg\vert \rho g \right\rangle 
+    \end{equation}
+  \end{block}
+  \begin{block}{Integrating by parts on LHS}
+    \begin{equation}\nonumber
+      \begin{gathered}
+        N_{j,p}(x) EA \pd{u(x)}{x}  \bigg\vert_{x_a}^{x_b} +  \left\langle \pd{N_{j,p}(x)}{x}  \bigg\vert  EA  \pd{N_{i,p}(x)}{x}  U_i   \right\rangle \\
+        = \\
+        \left\langle N_{j,p}(x) \bigg\vert \rho g \right\rangle \quad \forall j = 1, \ldots,m
+      \end{gathered}
+    \end{equation}
+  \end{block}
+
+  \begin{itemize}
+    \item The element matrices and force vector are
+\begin{scriptsize}
+  \begin{equation}\nonumber
+    \setlength\arraycolsep{1.5pt}
+    {EA}
+    \begin{bmatrix}
+      \left \langle N_1^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_1^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_1^\prime(x) \vert N_m^\prime(x) \right \rangle \\
+      \left \langle N_2^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_2^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_2^\prime(x) \vert N_m^\prime(x) \right \rangle \\
+      \left \langle N_3^\prime(x) \vert N_1^\prime(x) \right \rangle &  \left \langle N_3^\prime(x) \vert N_2^\prime(x) \right \rangle & \left \langle N_3^\prime(x) \vert N_m^\prime(x) \right \rangle \\
+    \end{bmatrix}
+    \begin{Bmatrix}
+      U_1 \\
+      U_2 \\
+      U_3 \\
+    \end{Bmatrix}=
+    \begin{Bmatrix}
+      \left \langle N_1(x) \vert \rho g \right \rangle \\
+      \left \langle N_2(x) \vert \rho g \right \rangle \\
+      \left \langle N_3(x) \vert \rho g \right \rangle \\ 
+    \end{Bmatrix}    
+  \end{equation}
+\end{scriptsize}
+\item Evaluation of  inner product
+  \begin{equation}\nonumber
+    \begin{aligned}
+      \underset{\text{inner~product}}{\left\langle f^x(x) \big\vert g^x(x) \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b} f^x(x) g^x(x) ~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x f^x(x_k) g^x(x_k)}\\
+    \end{aligned}
+  \end{equation}  
+
+\item Transformation from $x$ to $\xi$ is required as NURBS
+  basis is a function of parameter $\xi$
+  
+  \end{itemize}
+  
   \newpage
 
   %  \begin{block}{basis}
@@ -219,7 +283,8 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
         \int_{\Omega^e} (B^TCB  \,d\Omega)\,u = \int_{\Gamma^e_t} R.t \,d\Gamma +\int_{\Omega^e} R.f \,d\Omega
     \end{equation*}
     \item Assembled the element stiffness and force matrices into the global matrices using connectivity arrays.
-\newpage
+
+      \newpage
   
   \begin{minipage}[b]{0.48\linewidth}
     \includegraphics[width=1.0\textwidth,height=0.5\textheight]{figures/undeformed_plate.png} \\
@@ -233,7 +298,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       \item $ [K^G]$\{U\}=$\{F^G\}$ 
       \item The displacements are then added to the control points and the new control points are then used to plot the deformed plate.
 \end{itemize}
-\newpage
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -252,9 +317,7 @@ $R_i$ $\rightarrow$ NURBS Basis used to represent element in IGA
       \item Irrespective of the degree of basis function or no. of elements, FEA gives exact solution at node, but not IGA because of non-interpolation of B-spline control points
       
   \end{itemize}
-  \newpage
-  content
-  \newpage
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
