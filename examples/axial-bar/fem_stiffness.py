@@ -3,8 +3,6 @@ import numpy as np
 import math
 import numpy as np
 np.set_printoptions(precision=4 , suppress=True)
-
-from basis import N, Nprime
 from basis import H, Hprime
 
 import matplotlib.pyplot as plt
@@ -31,7 +29,7 @@ def assemble_force(num_nodes, num_disps, elem_nodes, fset, bc_nodes):
     for key in fset.keys():
         conn = elem_nodes[key]
         F[conn[0]*num_disps:conn[1]*num_disps+1] += fset[key]
-    return np.delete(F, bc_nodes, 0)
+    return F #np.delete(F, bc_nodes, 0)
 
 class KnotParameter:    
     """
@@ -73,6 +71,7 @@ class KnotParameter:
         # transformation of variables into element space
         xi = (b-a)*xihat/2. + (b+a)/2.
 
+        #print np.sum(wxi)
         return xi, wxi
 
 if __name__ == "__main__":
@@ -80,14 +79,15 @@ if __name__ == "__main__":
     """
     """
     a = 0.0
-    b = 2.0
+    b = 1.0
     
-    num_nodes      = 4
+    num_nodes      = 5
     num_elems      = num_nodes - 1
-    num_elem_nodes = 2
-    num_disps      = 1
+    num_elem_nodes = 2 # linear element
+    num_disps      = 1 # only horizontal dof
     ndofs          = num_nodes*num_disps
     le             = (b-a)/num_elems
+
     xvals = np.linspace(a,b,num_nodes)
     nodes = []
     for n in range(num_nodes):
@@ -104,11 +104,27 @@ if __name__ == "__main__":
     xi = {}
     for e in range(num_elems):
         xi[e] = KnotParameter(e, [le*e, le*(e+1)])
-    
+        print e, xi[e]
+        
     N = num_elem_nodes*num_disps
     
-    #  
-    det = 1
+    #
+    
+    det = 1.
+    
+    # Gather local element force vectors
+    F = {}
+    for key in xi.keys():
+        xipts, wpts = xi[key].get_quadrature_points_weights(2)
+        le = xi[key].bounds[1]-xi[key].bounds[0]
+        print le
+        F[key] = np.zeros((N))
+        for i in range(0,N):
+            for xinode, wnode in zip(xipts, wpts):
+                F[key][i] += H(xinode, le, i+1)*wnode*det
+
+    print F
+   
 
     # Gather local element stiffness matrices
     K = {}
@@ -121,22 +137,18 @@ if __name__ == "__main__":
                 for xinode, wnode in zip(xipts, wpts):
                     K[key][i,j] += Hprime(xinode, le, i+1)*Hprime(xinode, le, j+1)*wnode/det
 
-    # Gather local element force vectors
-    F = {}
-    for key in xi.keys():
-        xipts, wpts = xi[key].get_quadrature_points_weights(3)
-        le = xi[key].bounds[1]-xi[key].bounds[0]
-        F[key] = np.zeros((N))
-        for i in range(0,N):
-            for xinode, wnode in zip(xipts, wpts):
-                F[key][i] += H(xinode, le, i+1)*wnode*det
-    
+        print key, K[key]
+        
     kmat = assemble_stiffness(num_nodes, num_disps, elem_nodes, K, bc_nodes)
-    fmat = assemble_force(num_nodes, num_disps, elem_nodes, F, bc_nodes)
 
     print kmat
-    print fmat
     
+
+    fmat = assemble_force(num_nodes, num_disps, elem_nodes, F, bc_nodes)
+
+    print fmat, np.sum(fmat)
+
+
     # Solve the linear system
     u = np.linalg.solve(kmat,fmat)
     
@@ -144,9 +156,9 @@ if __name__ == "__main__":
 
     plt.figure()
     plt.plot(xvals[1:], u , '-o', label='')
-    plt.show()
+    #plt.show()
 
-    #TODO
+    # TODO
     ## 1. Find det of jacobian
     ## 2. Use quadratic elemnet
     ## 3. Use same setup for isogeometric analysis

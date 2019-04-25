@@ -33,15 +33,17 @@ def Nprime(xi, i, enum):
             return 4*(2*xi-1)
 
 def H(xi, L, i):
-    if i == 1:
-        return 1.0 - xi/L 
     if i == 2:
         return xi/L
+    if i == 1:
+        return 1.0 - xi/L
+    else:
+        raise
 
 def Hprime(xi, L, i):
-    if i == 1:
-        return -1.0/L 
     if i == 2:
-        return 1.0/L
+        return 1.0/L 
+    if i == 1:
+        return -1.0/L
 
 
