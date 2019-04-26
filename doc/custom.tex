@@ -1,0 +1,117 @@
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[normalem]{ulem}  %for italicized text
+
+\setcounter{secnumdepth}{4} % section, subsec, subsubsection, para, subpara
+\usepackage{chngcntr}
+%\counterwithout{paragraph}{subsubsection} % removes paragraph from the subsubsections
+\counterwithin{paragraph}{subsection} % makes paragraph depend on chapter
+%\renewcommand{\theparagraph}{\arabic{paragraph}} % redefine the display of the paragraph
+% Numbering of subsubsection
+% https://tex.stackexchange.com/questions/3177/how-to-change-the-numbering-of-part-chapter-section-to-alphabetical-r
+%\renewcommand\thesubsubsection{(\Alph{subsubsection})}
+\renewcommand{\theparagraph}{(\alph{paragraph})}
+%\renewcommand{\theparagraph}{\arabic{paragraph}}
+%%     \arabic (1, 2, 3, ...)
+%%     \alph (a, b, c, ...)
+%%     \Alph (A, B, C, ...)
+%%     \roman (i, ii, iii, ...)
+%%     \Roman (I, II, III, ...)
+%%     \fnsymbol (∗, †, ‡, §, ¶, ...)
+
+\usepackage[standard-baselineskips]{cmbright}
+\renewcommand\familydefault{\sfdefault}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+% https://latex.org/forum/viewtopic.php?t=29038
+%\usepackage{mathtools}
+%\usepackage{amssymb}
+%\usepackage{amsfonts}
+%\usepackage{amsmath}
+
+%\usepackage{eucal}
+%\usepackage[mathcal]{eucal}
+\usepackage[mathscr]{eucal}
+\usepackage[sans]{dsfont}
+
+%\usepackage{newtxmath}
+%\SetSymbolFont{largesymbols}{bold}{OMX}{cmsy}{b}{n}
+
+\usepackage{mathalfa}
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{doi}
+\usepackage{xcolor}
+\usepackage{graphicx,dblfloatfix} 
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{cancel}
+
+\usepackage{bm} % load after fonts
+\usepackage{epigraph} % quotes in chapter
+\renewcommand{\textflush}{flushepinormal}
+
+\usepackage{subcaption}
+
+% Define inner product in latex
+\newcommand\inner[2]{{\Bigg\langle} #1 ~\Bigg|~ #2 {\Bigg\rangle}}
+\newcommand\sinner[2]{{\Big\langle} #1 ~\Big|~ #2 {\Big\rangle}}
+\newcommand\linner[2]{{\big\langle} #1 ~\big|~ #2 {\big\rangle}}
+\newcommand\oinner[2]{{\langle} #1 ~|~ #2 {\rangle}}
+\newcommand\otinner[3]{{\langle} #1 |#2| #3 {\rangle}}
+\newcommand\cinner[2]{{\langle} #1 | #2 {\rangle}}
+\newcommand\crinner[2]{{(} #1 | #2 {)}}
+
+% Define commands
+\newcommand{\half}{\ensuremath{\frac{1}{2}}}
+
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand{\bed}{\begin{displaymath}}
+\newcommand{\eed}{\end{displaymath}}
+
+\newcommand{\pd}[2]{\dfrac{\partial #1}{\partial #2}}
+\newcommand{\pf}[2]{\dfrac{d #1}{d #2}}
+\newcommand{\pdt}[2]{\dfrac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\pft}[2]{\dfrac{d^2 #1}{d #2^2}}
+\newcommand{\pdtno}[2]{\dfrac{\partial^2 #1}{\partial #2}}
+\newcommand{\pdd}[3]{\dfrac{\partial^2 #1}{\partial #2 \partial #3}}
+\newcommand{\pff}[3]{\dfrac{d^2 #1}{d #2 d #3}}
+\newcommand{\tdt}[2]{\dfrac{d^2 #1}{d #2^2}}
+\newcommand{\td}[2]{\dfrac{d #1}{d #2}}
+\newcommand{\mb}{\bm}
+
+\newcommand{\x}{\bm{x}}
+\newcommand{\y}{\bm{y}}
+\newcommand{\z}{\bm{z}}
+
+\newcommand{\q}{\bm{q}}
+\renewcommand{\u}{\bm{u}}
+\renewcommand{\v}{\bm{v}}
+\newcommand{\qd}{\bm{\dot{q}}}
+\newcommand{\qdd}{\bm{\ddot{q}}}
+\newcommand{\R}{\bm{R}}
+\renewcommand{\S}{\bm{S}}
+\newcommand{\zerovec}{\bm{0}}
+
+\newcommand{\for}{\mathrm{for}}
+
+\graphicspath{{figures/}}
+
+%% \newcommand\spmatrix[1]{{%
+%%   \tiny\arraycolsep=0.3\arraycolsep\ensuremath{\begin{pmatrix}#1\end{pmatrix}}}}
+%% \newcommand\sbmatrix[1]{{%
+%%   \tiny\arraycolsep=0.3\arraycolsep\ensuremath{\begin{bmatrix}#1\end{bmatrix}}}}
+%% 
+
+\newcommand\bdot[1]{\overset{\bm \cdot}{#1}}
+% {\langle} #1 | #2 | #3 {\rangle}
+
+\usepackage{lscape}
+
+%  vector
+\newcommand*{\vv}[1]{\vec{\mkern0mu#1}}
