@@ -1,6 +1,11 @@
 function [KG, B1,C] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
     cconn,knot, ngpoints1, ngpoints2, num_elem_nodes, ...
     cpts, KU, KV, m, n, k1, k2)
+%%%%%%%%%%OUTPUT%%%%%%%%%%%%
+% KG - Global stiffness matrix
+% B1- Strain - displacement matrix
+% C - constitutive matrix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 syms u v
 E  = 1000; % aluminium
 nu = 0.3;

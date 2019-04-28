@@ -1,4 +1,10 @@
 function [geometry] = nrbmak(CParray, Knots)
+%%%%%%%%%%INPUT%%%%%%%%%
+%CParray - control point array with weights
+%Knots - Knot vectors
+%%%%%%%%%%OUTPUT%%%%%%%%
+%geometry - Points of the surface
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
     syms u
     KnotU = Knots{1};
     KnotV = Knots{2};

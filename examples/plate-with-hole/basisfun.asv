@@ -1,11 +1,7 @@
 function N=basisfun(n,p,U)  
-% %%%% INPUT %%%%%%%
-% n = number of control points
-% p = degree of the basis function
-% U = Knot vector
-%%%%%% OUTPUT %%%%%%%%%
-%N - Basis function N_{i,p}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% INPUT %%%%%%%
+n = number of control points
+p = degree of th
 syms u
 unq=unique(U);
 unqlen=size(unique(U),1);

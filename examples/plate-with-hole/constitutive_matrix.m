@@ -1,4 +1,12 @@
 function [C] = constitutive_matrix(E,nu,h)
+%%%%%%%INPUT%%%%%%%%%
+% E - Young's modulus
+% nu - Poisson's ratio
+% h - thickness of the plate
+%%%%%%%OUTPUT%%%%%%%%%
+% C - Constitutive matrix
+%%%%%%%%%%%%%%%%%%%%%%
+
 C = zeros(3,3);
 a = E/((1-nu*nu));
 C(1,1) = a;
