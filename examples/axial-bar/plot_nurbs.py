@@ -2,6 +2,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from basis import N, Nprime
 
+def exact(x,L):
+    return L*x - x*x/2.0
+
 ###################################################################
 # plot results
 ###################################################################
@@ -106,8 +109,38 @@ plt.xlabel(r'$\xi$')
 plt.ylabel(r'$\partial{N(\xi)}/\partial {\xi}$')
 plt.legend(loc='upper center', ncol=2, frameon=False)
 plt.savefig('bar-basis-function-derivatives.pdf', bbox_inches='tight', pad_inches=0.05)
+plt.close()
 
+#######################################################################
+# Show displacement
+#######################################################################
 
+plt.figure()
+fig, ax = plt.subplots()
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+ax.xaxis.set_ticks_position('bottom')
+ax.yaxis.set_ticks_position('left')
+p = [0, 1.0, 2.0, 2.0]
+xi1 = np.linspace(0.0, 0.5, num=10)
+N1 = N(xi1,1,1)
+N2 = N(xi1,2,1)
+N3 = N(xi1,3,1)
+F1 = N1*p[0] + N2*p[1] + N3*p[2]
+xi2 = np.linspace(0.5, 1.0, num=10)
+N4 = N(xi2,1,2)
+N5 = N(xi2,2,2)
+N6 = N(xi2,3,2)
+F2 = N4*p[1] + N5*p[2] + N6*p[3]
+x = np.linspace(0, 2, 10)
+ex = exact(x,2)
+plt.plot(2*xi1, F1, '-', label=r'element 1 (IGA)', mew=mew, ms=markerSize, color=tableau20[16], mec='black')
+plt.plot(2*xi2, F2, '-', label=r'element 2 (IGA)', mew=mew, ms=markerSize, color=tableau20[14], mec='black')
+plt.plot(x, ex, 'o', label=r'exact' , mew=mew, ms=markerSize, color=tableau20[4], mec='black')
+plt.xlabel(r'x')
+plt.ylabel(r'displacement u(x)')
+plt.legend(loc='best', frameon=False)
+plt.savefig('bar-solution.pdf', bbox_inches='tight', pad_inches=0.05)
+plt.close()
 
-
-
+stop
