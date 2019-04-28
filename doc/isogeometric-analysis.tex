@@ -49,7 +49,7 @@
 \maketitle
 
 %\abstract{}
-
+    
 \section{Introduction and Motivation}
 Non-uniform Rational B-Splines (NURBS) \cite{Piegl:NurbsBook} are a
 popular way to represent curves and surfaces in geometry modeling. In
@@ -59,8 +59,9 @@ for example, N-dimensional vector spaces in finite element
 analysis. This realization has led to the development of isogeometric
 analysis
 (IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013}
-where the same functions used for geometry representation in $\mathbb{E}^3$ is also used
-to represent displacement field in $\mathbb{R}^M$.
+where the same functions used for geometry representation in
+$\mathbb{E}^3$ is also used to represent displacement field in
+$\mathbb{R}^M$.
 \subsection{Importance of IGA}
 \begin{itemize}
   \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements. Whereas in IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
@@ -182,6 +183,105 @@ For ease of notation we define the following form
 \end{equation}
 
 \section{Isogeometric Analysis of Bar}
+
+An elastic bar is suspended veritically and is allowed to deform under
+self weight. Let us look at the solution of the elastic problem using
+isogeometric analysis.
+\begin{figure}[h] 
+  \centering
+  \includegraphics[width=0.2\textwidth]{bar-setup.pdf} 
+  \caption{\emph{Setup of the deformation of bar problem.}}
+  \label{fig:bar-setup}
+\end{figure}
+
+\begin{equation}\label{eqn:bar-governing-equation}
+  \pd{}{x} \left( EA \pd{u(x)}{x} \right) - \rho g  = 0
+\end{equation}
+where $E$ is the Young's modulus of material of bar, $A$ is the area
+of cross section, $\rho$ is the density of material and $g$ is the
+acceleration due to gravity. Consider the following expansions for the
+solution form and its spatial derivative
+\begin{equation}\label{eqn:bar-spectral-expansions}
+  u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i \qquad \mathrm{and} \qquad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i,
+\end{equation}
+where $N_{i,p}(x)$ are NURBS basis functions and $U_i$ are the control
+points. We use the expansions~\eqref{eqn:bar-spectral-expansions} in
+the governing equations~\eqref{eqn:bar-governing-equation}. This gives
+rise to the following residual
+\begin{equation}\label{eqn:bar-governing-equation}
+  R := \pd{}{x} \left( EA  \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i \right) - \rho g  = 0.
+\end{equation}
+The analysis procedure involves the projection of the above residual
+onto the basis functions used in the assumed form of solution. This is
+represented mathematically as an inner product (projection operation) as
+\begin{equation}\nonumber
+  \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
+  \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle 
+\end{equation}
+The weak form is obtained using integration by parts as follows
+\begin{equation}\nonumber
+  \begin{gathered}
+    \underset{boundary~term}{{{N_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b}} +  \underset{stiffness~matrix}{\left\langle {\color{red}{\pd{N_{j,p}(x)}{x}}}  \bigg\vert  {\color{blue}{EA  \pd{N_{i,p}(x)}{x}  U_i}}   \right\rangle}  = 
+    \underset{force~vector}{\left\langle {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle} \quad \forall j = 1, \ldots,m
+  \end{gathered}
+\end{equation}
+This gives rise to the following system for each element $x \in [x_a,
+  x_b]$
+      \begin{equation}\nonumber
+    \setlength\arraycolsep{1.5pt}
+    {EA}
+    \begin{bmatrix}
+      \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
+      \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
+      \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
+    \end{bmatrix}
+    \begin{Bmatrix}
+      U_1 \\
+      U_2 \\
+      U_3 \\
+    \end{Bmatrix}=
+    \begin{Bmatrix}
+      \left \langle {\color{red}{N_1(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
+      \left \langle {\color{red}{N_2(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
+      \left \langle {\color{red}{N_3(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\ 
+    \end{Bmatrix}    
+  \end{equation}
+
+Evaluation of  inner product
+\begin{equation}\nonumber
+  \begin{aligned}
+    \underset{\text{inner~product}}{\left\langle {\color{red}{f^x(x)}} \big\vert  {\color{blue}{g^x(x)}} \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b}  {\color{red}{f^x(x)}}  {\color{blue}{g^x(x)}}~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x  {\color{red}{f^x(x_k)}}  {\color{blue}{g^x(x_k)}}}\\
+  \end{aligned}
+\end{equation}  
+      
+Transformation from $x$ to $\xi$ is required as NURBS basis is a
+function of parameter $\xi$
+
+%\includegraphics[width=1.0\textwidth]{figures/bar-basis-function-derivatives.pdf} \\
+%\includegraphics[width=1.0\textwidth]{figures/bar-basis-functions.pdf} \\
+
+The evaluation of stiffness matrix and force vector requires the NURBS
+basis function and its derivatives
+\begin{equation}\label{eqn:bar-nurbs-derivatives}
+  \begin{aligned}
+    & \textcolor{blue}{\text{element 1 [0,0.5]}}  & & \textcolor{blue}{\text{element 2 [0.5,1]}} \\
+    N_1^1(\xi) &=  (2 \xi -1)^2 & N_1^2(\xi) &= (2\xi-2)(\xi-1)  \\
+    N_2^1(\xi) &= -2\xi(3\xi-2) &N_2^2(\xi) &= -6\xi^2 + 8\xi -2 \\
+    N_3^1(\xi) &=  2\xi^2       & N_3^2(\xi) &= (2\xi -1)^2 \\
+  \end{aligned}
+\end{equation}
+These functions are plotted and visualized in Figure~\ref{}.
+\begin{figure}\label{eqn:bar-solution}
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/bar-solution.pdf} \\
+\end{figure}
+In Figure~\ref{eqn:bar-solution} we compare the IGA solution with the analytical solution given as
+\begin{equation}\nonumber
+  u(x) = \frac{\rho g}{E} \left( Lx - \frac{x^2}{2}\right)
+\end{equation}
+It can be seen that the IGA solution with two elements produces the
+exact solution.
+
 \section{Isogeometric Analysis of Plate}
 
 
