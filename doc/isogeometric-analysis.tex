@@ -39,7 +39,7 @@
 
 \graphicspath{{talk/}{talk/figures/}{figures/}}
 
-\title{Isogeometric Finite Element Analysis Using Non-uniform Rational Bsplines}
+\title{Isogeometric Analysis Using Non-uniform Rational Bsplines}
 \author{Komahan Boopathy  and Siddarth Niranjan Babu\\
   {\normalsize\itshape School of Aerospace Engineering, Georgia Institute of Technology,
     Atlanta, GA, USA. } %, 30332-0150, USA.}\\
@@ -58,7 +58,7 @@ space. In principle, they can be used to span other spaces as well,
 for example, N-dimensional vector spaces in finite element
 analysis. This realization has led to the development of isogeometric
 analysis
-(IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013}
+(IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013,Simpson}
 where the same functions used for geometry representation in
 $\mathbb{E}^3$ is also used to represent displacement field in
 $\mathbb{R}^M$.
@@ -75,12 +75,6 @@ $\mathbb{R}^M$.
 
 -- Isogeometric boundary element methods for elastostatic analysis were presented in [127,118],
 demonstrating that mesh generation can be completely circumvented by using CAD discretizations for analysis.
-
-R.N. Simpson, S.P.A. Bordas, J. Trevelyan, T. Rabczuk, A two-dimensional isogeometric boundary element method for elastostatic analysis,
-Comput. Methods Appl. Mech. Engrg. 209–212 (2012) 87–100.
-
-M.A. Scott, R.N. Simpson, J.A. Evans, S. Lipton, S.P.A. Bordas, T.J.R. Hughes, T.W. Sederberg, Isogeometric boundary element analysis
-using unstructured T-splines, Comput. Methods Appl. Mech. Engrg. 254 (2013) 197–221.
 
 \section{Framework}
 The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
@@ -185,7 +179,7 @@ For ease of notation we define the following form
 \section{Isogeometric Analysis of Bar}
 An elastic bar is suspended veritically and is allowed to deform under
 self weight as shown in Figure~\ref{fig:bar-setup}. We first consider
-the solution of the elastic problem using isogeometric analysis.
+the solution of the elastic problem using isogeometric analysis.\cite{1D_bar}
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.2\textwidth]{bar-setup.pdf} 
@@ -388,7 +382,7 @@ The displacements of the control points are then added to the original control p
 \section{Conclusions}
 B-spline basis function has unique properties like local support exact geometry representation and refinement technique. IGA analysis framework makes use of these NURBS properties. It is observed that the displacement solution obtained from IGA is equivalent to control points of B-spline displacement curve. Coupling of CAD and analysis solvers reduces the burden of mesh regeneration. This minimizes the computational cost. Utilizing the exact geometry in anlysis provide accurate results than FEA. Also, IGA gives better solution per degree of freedom than FEM. \\
 IGA has many advantages over FEM, but also has some disadvantages of its own. IGA is a NURBS based method, analysts must require a lot of CAD knowledge. Multi-patch B-spline modeling of intricate shapes is a very difficult task. Irrespective of the degree of the basis function and number of elements, the FEM solution at nodes always gives exact solution. But, that's not the case in IGA, because of non-interpolation of B-spline control points.  
-
+\newpage
 \section{Future Work}
 \begin{itemize}
     \item Visualize stresses and strains in the model.
@@ -396,9 +390,6 @@ IGA has many advantages over FEM, but also has some disadvantages of its own. IG
     \item Include knot insertion algorithm to extend it for any number of elements.
     \item Extend the code for 3D models.
 \end{itemize}
-\newpage
-
-
 
 
 \bibliographystyle{myabbrvnat} \bibliography{references}
