@@ -1,4 +1,12 @@
 function [K, F] = apply_boundary_conditions(kmat, fvec, bc_dofs)
+%%%%%%%%%%%INPUT%%%%%%%%%%%%%
+% kmat - element stiffness matrix
+% fvec - element force vector
+% bc_dofs - restricted degrees of freedom
+%%%%%%%%%%OUTPUT%%%%%%%%%%%%
+% K - reduced global stiffness matrix
+% F - reduced global force vector
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 K = kmat;
 F = fvec;
 k=0;

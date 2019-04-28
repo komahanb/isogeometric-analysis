@@ -39,7 +39,7 @@
 
 \graphicspath{{talk/}{talk/figures/}{figures/}}
 
-\title{Isogeometric Finite Element Analysis Using Non-uniform Rational Bsplines}
+\title{Isogeometric Analysis Using Non-uniform Rational Bsplines}
 \author{Komahan Boopathy  and Siddarth Niranjan Babu\\
   {\normalsize\itshape School of Aerospace Engineering, Georgia Institute of Technology,
     Atlanta, GA, USA. } %, 30332-0150, USA.}\\
@@ -58,7 +58,7 @@ space. In principle, they can be used to span other spaces as well,
 for example, N-dimensional vector spaces in finite element
 analysis. This realization has led to the development of isogeometric
 analysis
-(IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013}
+(IGA)~\cite{HUGHES20054135,KACPRZYK201487,NGUYEN201589,Agrawal2018,Milic2013,Simpson}
 where the same functions used for geometry representation in
 $\mathbb{E}^3$ is also used to represent displacement field in
 $\mathbb{R}^M$.
@@ -75,12 +75,6 @@ $\mathbb{R}^M$.
 
 -- Isogeometric boundary element methods for elastostatic analysis were presented in [127,118],
 demonstrating that mesh generation can be completely circumvented by using CAD discretizations for analysis.
-
-R.N. Simpson, S.P.A. Bordas, J. Trevelyan, T. Rabczuk, A two-dimensional isogeometric boundary element method for elastostatic analysis,
-Comput. Methods Appl. Mech. Engrg. 209–212 (2012) 87–100.
-
-M.A. Scott, R.N. Simpson, J.A. Evans, S. Lipton, S.P.A. Bordas, T.J.R. Hughes, T.W. Sederberg, Isogeometric boundary element analysis
-using unstructured T-splines, Comput. Methods Appl. Mech. Engrg. 254 (2013) 197–221.
 
 \section{Framework}
 The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
@@ -185,7 +179,7 @@ For ease of notation we define the following form
 \section{Isogeometric Analysis of Bar}
 An elastic bar is suspended veritically and is allowed to deform under
 self weight as shown in Figure~\ref{fig:bar-setup}. We first consider
-the solution of the elastic problem using isogeometric analysis.
+the solution of the elastic problem using isogeometric analysis.\cite{1D_bar}
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.2\textwidth]{bar-setup.pdf} 
@@ -323,11 +317,81 @@ It can be seen that the IGA solution with two elements produces the
 exact solution.
 
 \section{Isogeometric Analysis of Plate}
+An infinite plate of L=8 and W=8 with a circular hole subjected to in-plane concentrated load at one of the control points. The material properties were taken as $E = 10^3$ and Poisson's ratio $\nu =0.3$
+\begin{figure}[h] 
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/plate1.PNG} 
+  \caption{\emph{Setup of the deformation of plate problem.}}
+  \label{fig:plate-setup}
+\end{figure}
+The geometry can be simplified to a quarter palte due to its symmetry. It is modeled using NURBS with 12 control points. For this plate with a circular hole problem, the order of the basis function is chosen as p=2 and q=2. Therefore, the total of number of active control points and the basis functions in an element are 9. The number of control points along $\xi$ direction is given by $n_{cp}(\xi)$ = Total number of knots-(p+1) = 4 and the number of control points along $\eta$ direction is given by $n_{cp}(\eta)$ = Total number of knots in $\eta$ direction-(q+1) = 3. The geometry is divided into two elements with each having 9 active control points. 
+\begin{figure}[h] 
+  \centering
+  \includegraphics[width=0.5\textwidth]{figures/plate2.png} 
+  \caption{\emph{Quarter model of the plate with circular hole.}}
+  \label{fig:plate-setup}
+\end{figure}
+The geometry of the NURBS discretized element $\Omega^e$ is given by the combination of the basis function $R_i$ and the control point variable $P_i$ as
+\begin{equation}\nonumber
+    x^e = \sum_{i=1}^{n_{cp}^e} R_iP_i
+\end{equation}
+and using Galerkin approach, the solution field is given by,
+\begin{equation}\nonumber
+    u^e = \sum_{i=1}^{n_{cp}^e}R_iu_i
+\end{equation}
+The NURBS basis function and its derivatives are evaluated to obtain the strain-displacement matrix,
+    \begin{equation*}
+        B=\begin{bmatrix}
+        R_{1,x} & 0 & R_{2,x} & 0 & \dots & R_{9,x} & 0\\
+        0 & R_{1,y} & 0 &R_{2,y} & \dots & 0 & R_{9,y}\\
+        R_{1,y} & 0 &R_{1,x} &  R_{2,y} & \dots &  R_{9,y} &R_{9,x}
+        \end{bmatrix}
+    \end{equation*}
+The strain displacement matrix is then used to evaluate the element stiffness matrix and force vector using the weak formulation. The weak formulation is given by,
+\begin{equation*}
+        \int_{\Omega^e} (B^TCB  \,d\Omega)\,u = \int_{\Gamma^e_t} R.t \,d\Gamma +\int_{\Omega^e} R.f \,d\Omega
+    \end{equation*}
+Like FEM, IGA discretized weak form, can also be cast into the standard matrix form as
+\begin{equation*}
+    \sum_{e=1}^{nel}[K^eU^e=F^e]
+\end{equation*}
+which in global form can be written as 
+\begin{equation}
+    K^GU^{cp}=F^G
+\end{equation}\label{Global}
+where $K^e$, $F^e$ and $U^e$ denote the NURBS described iso-geometric element's stiffness matrix, external force vector, and displacement vector, respectively. The procedure to assemble the global matrices are similar to assembly procedure of FEA but it uses control point assembly array instead of nodal connectivity matrix.\\
+Using the global stiffness matrix and force vectors into the global form to obtain the displacements of the control points. 
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth,height=.9\textwidth]{figures/undeformed_plate.png}
+  \captionof{figure}{Undeformed Plate}
+  \label{fig:test1}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+  \centering
+  \includegraphics[width=1.0\linewidth,height=.9\textwidth]{figures/deformed_plate.png}
+  \captionof{figure}{Deformed Plate}
+  \label{fig:test2}
+\end{minipage}
+\end{figure}
 
-
-\section{Results}
+The displacements of the control points are then added to the original control points to obtain the new control points. The new control points are then used to plot the deformed plate. These displacement values can be used to find the stresses and strains in the model
 
 \section{Conclusions}
+B-spline basis function has unique properties like local support exact geometry representation and refinement technique. IGA analysis framework makes use of these NURBS properties. It is observed that the displacement solution obtained from IGA is equivalent to control points of B-spline displacement curve. Coupling of CAD and analysis solvers reduces the burden of mesh regeneration. This minimizes the computational cost. Utilizing the exact geometry in anlysis provide accurate results than FEA. Also, IGA gives better solution per degree of freedom than FEM. \\
+IGA has many advantages over FEM, but also has some disadvantages of its own. IGA is a NURBS based method, analysts must require a lot of CAD knowledge. Multi-patch B-spline modeling of intricate shapes is a very difficult task. Irrespective of the degree of the basis function and number of elements, the FEM solution at nodes always gives exact solution. But, that's not the case in IGA, because of non-interpolation of B-spline control points.  
+\newpage
+\section{Future Work}
+\begin{itemize}
+    \item Visualize stresses and strains in the model.
+    \item Use IGA for complex geometries to see its benefits.
+    \item Include knot insertion algorithm to extend it for any number of elements.
+    \item Extend the code for 3D models.
+\end{itemize}
+
+
 \bibliographystyle{myabbrvnat} \bibliography{references}
 
 \end{document}

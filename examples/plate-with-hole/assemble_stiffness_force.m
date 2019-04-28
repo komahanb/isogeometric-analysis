@@ -1,6 +1,21 @@
 function [KG, B1,C] = assemble_stiffness_force(num_disps, num_nodes, num_elems, ...
     cconn,knot, ngpoints1, ngpoints2, num_elem_nodes, ...
     cpts, KU, KV, m, n, k1, k2)
+%%%%%%%%%INPUT%%%%%%%%%%%%
+% num_disps - number of displacements
+% num_nodes - total no of nodes
+% num_elems - number of elements
+% cconn - control pt connectivity matrix
+% knot - Knot vectors
+% num_elem_nodes - number of control pts in elems
+% cpts - control points
+% k1 - degree of the curve in u direction
+% k2 - degree of the curve in v direction
+%%%%%%%%%%OUTPUT%%%%%%%%%%%%
+% KG - Global stiffness matrix
+% B1- Strain - displacement matrix
+% C - constitutive matrix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 syms u v
 E  = 1000; % aluminium
 nu = 0.3;

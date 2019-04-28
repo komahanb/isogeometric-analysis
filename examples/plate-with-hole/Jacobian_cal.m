@@ -1,4 +1,18 @@
 function [Jsub, R2, dRdxisub, dRdetasub] = Jacobian_cal(CP,KU,KV,m,n,k1,k2,ccp,elno,uhat,vhat)
+%%%%%%%INPUT%%%%%%%%%%%%%
+% CP - control pt array
+% KU - Knot vector in U direcn
+% KV - Knot vector in V direcn
+% m - number of control points in u direcn-1
+% n - number of control points in v direcn-1
+% ccp - control point connectivity array
+% elno - element no
+%%%%%%%OUTPUT%%%%%%%%%%%%
+% Jsub - Jacobian value
+% R2 - Basis function matrix
+% dRdxisub - derivative of R wrt xi
+% dRdetasub - derivative of R wrt eta
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 syms u v
 nel=(m-k1+2)*(n-k2+2);
     k=1;

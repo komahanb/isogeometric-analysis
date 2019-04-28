@@ -27,6 +27,9 @@ CPArray(:,:,3) = [-L, -L, -L, 0;
 
 %% 4. Construct the NURBS described geometry
 geometry = nrbmak(CPArray, {KnotU, KnotV}); % Eq. (41)
+
+%% Plotting Undeformed Plate
+
 surf(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
 %plot3(geometry(:,:,1),geometry(:,:,2),geometry(:,:,3))
 colormap winter;
