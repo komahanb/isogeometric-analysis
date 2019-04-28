@@ -4,7 +4,7 @@
 \usepackage{caption}
 \usepackage{tcolorbox}
 %\setlength{\belowcaptionskip}{-10pt}
-
+%red
 %\usepackage{classdiagram}
 %\usepackage[T1]{fontenc}
 
@@ -183,23 +183,42 @@ For ease of notation we define the following form
 \end{equation}
 
 \section{Isogeometric Analysis of Bar}
-
 An elastic bar is suspended veritically and is allowed to deform under
-self weight. Let us look at the solution of the elastic problem using
-isogeometric analysis.
+self weight as shown in Figure~\ref{fig:bar-setup}. We first consider
+the solution of the elastic problem using isogeometric analysis.
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.2\textwidth]{bar-setup.pdf} 
   \caption{\emph{Setup of the deformation of bar problem.}}
   \label{fig:bar-setup}
 \end{figure}
-
+The geometry is modeled with information shown in
+Table~\ref{tab:bar-problem-parameters} with NURBS basis functions.
+\begin{table}
+  \centering
+  \caption{Parameters used in geometry modeling of bar.}
+  \label{tab:bar-problem-parameters}
+  \begin{tabular}{lc}
+    \hline
+    Parameter & Value \\
+    \hline
+    degree of basis & 2 \\
+    control points  &  [0, 0.5, 1.5, 2.0] \\
+    knot vector     & [0 0 0 0.5 1 1 1] \\
+    number of knot spans & 2 \\
+    \hline
+  \end{tabular}
+\end{table}
+\subsection{Governing Equation}
+The governing equation for the deformation of bar is
 \begin{equation}\label{eqn:bar-governing-equation}
   \pd{}{x} \left( EA \pd{u(x)}{x} \right) - \rho g  = 0
 \end{equation}
 where $E$ is the Young's modulus of material of bar, $A$ is the area
 of cross section, $\rho$ is the density of material and $g$ is the
-acceleration due to gravity. Consider the following expansions for the
+acceleration due to gravity.
+\subsection{Solution Form}
+Consider the following expansions for the
 solution form and its spatial derivative
 \begin{equation}\label{eqn:bar-spectral-expansions}
   u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i \qquad \mathrm{and} \qquad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i,
@@ -211,66 +230,87 @@ rise to the following residual
 \begin{equation}\label{eqn:bar-governing-equation}
   R := \pd{}{x} \left( EA  \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i \right) - \rho g  = 0.
 \end{equation}
+\subsection{Galerkin Projection}
 The analysis procedure involves the projection of the above residual
 onto the basis functions used in the assumed form of solution. This is
 represented mathematically as an inner product (projection operation) as
 \begin{equation}\nonumber
-  \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
-  \left\langle  {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle 
+  \left\langle  {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
+  \left\langle  {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle 
 \end{equation}
 The weak form is obtained using integration by parts as follows
 \begin{equation}\nonumber
   \begin{gathered}
-    \underset{boundary~term}{{{N_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b}} +  \underset{stiffness~matrix}{\left\langle {\color{red}{\pd{N_{j,p}(x)}{x}}}  \bigg\vert  {\color{blue}{EA  \pd{N_{i,p}(x)}{x}  U_i}}   \right\rangle}  = 
-    \underset{force~vector}{\left\langle {\color{red}{N_{j,p}(x)}} \bigg\vert {\color{blue}{\rho g}} \right\rangle} \quad \forall j = 1, \ldots,m
+    \underset{boundary~term}{{{N_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b}} +  \underset{stiffness~matrix}{\left\langle {\color{black}{\pd{N_{j,p}(x)}{x}}}  \bigg\vert  {\color{black}{EA  \pd{N_{i,p}(x)}{x}  U_i}}   \right\rangle}  = 
+    \underset{force~vector}{\left\langle {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle} \quad \forall j = 1, \ldots,m
   \end{gathered}
 \end{equation}
 This gives rise to the following system for each element $x \in [x_a,
   x_b]$
-      \begin{equation}\nonumber
-    \setlength\arraycolsep{1.5pt}
-    {EA}
-    \begin{bmatrix}
-      \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_1^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
-      \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_2^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
-      \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{red}{N_3^\prime(x)}} \vert {\color{blue}{N_m^\prime(x)}} \right \rangle \\
-    \end{bmatrix}
-    \begin{Bmatrix}
-      U_1 \\
-      U_2 \\
-      U_3 \\
-    \end{Bmatrix}=
-    \begin{Bmatrix}
-      \left \langle {\color{red}{N_1(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
-      \left \langle {\color{red}{N_2(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\
-      \left \langle {\color{red}{N_3(x)}} \vert {\color{blue}{\rho g}} \right \rangle \\ 
-    \end{Bmatrix}    
-  \end{equation}
+\begin{equation}\nonumber
+  \setlength\arraycolsep{1.5pt}
+                        {EA}
+                        \begin{bmatrix}
+                          \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
+                          \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
+                          \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
+                        \end{bmatrix}
+                        \begin{Bmatrix}
+                          U_1 \\
+                          U_2 \\
+                          U_3 \\
+                        \end{Bmatrix}=
+                        \begin{Bmatrix}
+                          \left \langle {\color{black}{N_1(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
+                          \left \langle {\color{black}{N_2(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
+                          \left \langle {\color{black}{N_3(x)}} \vert {\color{black}{\rho g}} \right \rangle \\ 
+                        \end{Bmatrix}    
+\end{equation}
+The evaluation of stiffness matrix and force vector requires the NURBS
+basis function and its derivatives shown in
+Table~\ref{tab:anlytical-form-of-nurbs-functions}
+\begin{table}
+  \centering
+  \caption{NURBS shape functions used in isogeometric analysis.}
+  \label{tab:anlytical-form-of-nurbs-functions}
+  \begin{tabular}{cc}
+    \hline
+    Element 1 & Element 2 \\
+    \hline
+    $N_1^1(\xi) =  (2 \xi -1)^2$ & $N_1^2(\xi) = (2\xi-2)(\xi-1)$  \\
+    $N_2^1(\xi) = -2\xi(3\xi-2)$ & $N_2^2(\xi) = -6\xi^2 + 8\xi -2$ \\
+    $N_3^1(\xi) =  2\xi^2$       & $N_3^2(\xi) = (2\xi -1)^2$ \\
+    \hline
+  \end{tabular}
+\end{table}
+These functions are plotted and visualized in Figure~\ref{fig:nurbs-basis-function-derivatives}.
 
-Evaluation of  inner product
+\subsection{Quadrature and Evalution of Inner Products}
+Evaluation of inner product
 \begin{equation}\nonumber
   \begin{aligned}
-    \underset{\text{inner~product}}{\left\langle {\color{red}{f^x(x)}} \big\vert  {\color{blue}{g^x(x)}} \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b}  {\color{red}{f^x(x)}}  {\color{blue}{g^x(x)}}~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x  {\color{red}{f^x(x_k)}}  {\color{blue}{g^x(x_k)}}}\\
+    \underset{\text{inner~product}}{\left\langle {\color{black}{f^x(x)}} \big\vert  {\color{black}{g^x(x)}} \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b}  {\color{black}{f^x(x)}}  {\color{black}{g^x(x)}}~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x  {\color{black}{f^x(x_k)}}  {\color{black}{g^x(x_k)}}}\\
   \end{aligned}
 \end{equation}  
       
 Transformation from $x$ to $\xi$ is required as NURBS basis is a
 function of parameter $\xi$
+\begin{figure}[h] 
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-functions.pdf}
+    \caption{basis function}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=1.0\textwidth]{figures/bar-basis-function-derivatives.pdf}
+    \caption{basis function derivatives}
+  \end{subfigure}
+  \caption{NURBS basis functions and derivatives for isogeometric
+    analysis of bar.}
+  \label{fig:nurbs-basis-function-derivatives}
+\end{figure}
 
-%\includegraphics[width=1.0\textwidth]{figures/bar-basis-function-derivatives.pdf} \\
-%\includegraphics[width=1.0\textwidth]{figures/bar-basis-functions.pdf} \\
-
-The evaluation of stiffness matrix and force vector requires the NURBS
-basis function and its derivatives
-\begin{equation}\label{eqn:bar-nurbs-derivatives}
-  \begin{aligned}
-    & \textcolor{blue}{\text{element 1 [0,0.5]}}  & & \textcolor{blue}{\text{element 2 [0.5,1]}} \\
-    N_1^1(\xi) &=  (2 \xi -1)^2 & N_1^2(\xi) &= (2\xi-2)(\xi-1)  \\
-    N_2^1(\xi) &= -2\xi(3\xi-2) &N_2^2(\xi) &= -6\xi^2 + 8\xi -2 \\
-    N_3^1(\xi) &=  2\xi^2       & N_3^2(\xi) &= (2\xi -1)^2 \\
-  \end{aligned}
-\end{equation}
-These functions are plotted and visualized in Figure~\ref{}.
 \begin{figure}\label{eqn:bar-solution}
   \centering
   \includegraphics[width=0.5\textwidth]{figures/bar-solution.pdf} \\
