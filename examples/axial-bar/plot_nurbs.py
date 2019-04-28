@@ -142,5 +142,3 @@ plt.ylabel(r'displacement u(x)')
 plt.legend(loc='best', frameon=False)
 plt.savefig('bar-solution.pdf', bbox_inches='tight', pad_inches=0.05)
 plt.close()
-
-stop
