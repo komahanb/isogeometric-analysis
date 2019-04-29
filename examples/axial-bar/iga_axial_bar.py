@@ -118,4 +118,4 @@ if __name__ == "__main__":
 
     # Solve the linear system
     u = np.linalg.solve(K, F)
-    print u
+    print "solution=", u
