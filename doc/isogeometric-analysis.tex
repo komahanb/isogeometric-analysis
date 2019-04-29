@@ -51,6 +51,7 @@
 %\abstract{}
     
 \section{Introduction and Motivation}
+
 Non-uniform Rational B-Splines (NURBS) \cite{Piegl:NurbsBook} are a
 popular way to represent curves and surfaces in geometry modeling. In
 other words, they provide a basis for three-dimensional euclidean
@@ -62,38 +63,44 @@ analysis
 where the same functions used for geometry representation in
 $\mathbb{E}^3$ is also used to represent displacement field in
 $\mathbb{R}^M$.
-\subsection{Importance of IGA}
+IGA is a recently introduced technique that employs the Computer Aided
+Design concepts of Non-uniform Rational B-splines(NURBS) tool to
+bridge the substantial bottleneck between the CAD and finite element
+analysis field. The fundamental concept of IGA is to utilize the NURBS
+basis functions not only for the construction or as a handler of the
+exact form of CAD geometries, but also as a tool that can be used for
+their mathematical analysis.
+The importance of IGA is follows:
 \begin{itemize}
   \item FEM utilizes the approximate form of CAD geometry by discretizing them into a smaller sub-geometry called elements. Whereas in IGA, CAD-based NURBS described geometries are directly employed in the analysis without making any geometrical approximations like in FEM.
   \item IGA reduces the burden of mesh regeneration and thus minimizes the computational cost. % to a great extent.
   \item Due to inherent higher order continuity and exact representation of geometrical features, IGA has been shown to be advantageous in contact, fluid, structural vibration problems and more. 
   \item IGA can be applied to specific problems which have been solved with FEM to attain improved solution.
 \end{itemize}
+Isogeometric boundary element methods for elastostatic analysis were
+presented in [127,118], demonstrating that mesh generation can be
+completely circumvented by using CAD discretizations for analysis.
+%To describe the application of IGA, a standard infinite plate with a
+%circular hole problem in tension as shown in Figure~\ref{fig:iga-demo}
+%is chosen.
+%\begin{figure}[h] 
+%  \centering
+%  \includegraphics[width=0.75\linewidth]{iga-demo.pdf}
+%  \caption{\emph{NURBS decretized quarter-plate with a hole}}
+%  \label{fig:iga-demo}
+%\end{figure}
+In IGA, apart from the
+geometrical details(length, height, width) of a model, its parametric
+details such as knot vectors, the order of NURBS basis functions, and
+the control points are also needed to construct the exact form of
+discretized geometry. The evaluation of NURBS basis functions and
+their respective derivatives, along with their corresponding mappings
+are need to be done along with the enforcement procedure for different
+boundary conditions for NURBS defined geometry.
+The main objective of the project is implementation of NURBS based
+Isogeometric Analysis(IGA) on test problems.
 
--- integration of geometry and analysis into a common framework
-
-
--- Isogeometric boundary element methods for elastostatic analysis were presented in [127,118],
-demonstrating that mesh generation can be completely circumvented by using CAD discretizations for analysis.
-
-\section{Framework}
-The main objective of the project is implementation of NURBS based Isogeometric Analysis(IGA) within the existing Finite element code architecture. IGA is a recently introduced technique that employs the Computer Aided Design concepts of Non-uniform Rational B-splines(NURBS) tool to bridge the substantial  bottleneck between the CAD and finite element analysis field. The fundamental concept of IGA is to utilize the NURBS basis functions not only for the construction or as a handler of the exact form of CAD geometries, but also as a tool that can be used for their mathematical analysis. To describe the application of IGA, a standard infinite plate with a circular hole problem in tension as shown in Figure~\ref{fig:iga-demo} is chosen. 
-\begin{figure}[h] 
-  \centering
-  \includegraphics[width=0.5\linewidth]{iga-demo.pdf}
-  \caption{\emph{NURBS decretized quarter-plate with a hole}}
-  \label{fig:iga-demo}
-\end{figure}
-In IGA, apart from the geometrical details(length, height, width) of a
-model, its parametric details such as knot vectors , the order of
-NURBS basis functions, and the control points are also needed to
-construct the exact form of discretized geometry. The evaluation of
-NURBS basis functions and their respective derivatives, along with
-their corresponding mappings are need to be done along with the
-enforcement procedure for different boundary conditions for NURBS
-defined geometry. The combinations of these complete the processing
-stage for the proposed implementation of IGA within the FEA structure.
-
+\section{NURBS representation of Curves and Surfaces}
 \subsection{Parametric Representation of Curves}
 Let $\vv{p}(u) = [x(u), y(u), z(u)]^T$ refer to the parametric
 representation of a point on a curve in three-dimensional Euclidean
@@ -179,7 +186,8 @@ For ease of notation we define the following form
 \section{Isogeometric Analysis of Bar}
 An elastic bar is suspended veritically and is allowed to deform under
 self weight as shown in Figure~\ref{fig:bar-setup}. We first consider
-the solution of the elastic problem using isogeometric analysis.\cite{1D_bar}
+the solution of the elastic problem using isogeometric
+analysis~\cite{bar-analysis,1D_bar}.
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.2\textwidth]{bar-setup.pdf} 
@@ -215,28 +223,28 @@ acceleration due to gravity.
 Consider the following expansions for the
 solution form and its spatial derivative
 \begin{equation}\label{eqn:bar-spectral-expansions}
-  u(x) := \sum_{i=1}^{m} N_{i,p}(x) U_i \qquad \mathrm{and} \qquad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i,
+  u(x) := \sum_{i=1}^{m} R_{i,p}(x) U_i \qquad \mathrm{and} \qquad \pd{u(x)}{x} := \sum_{i=1}^{m} \pd{R_{i,p}(x)}{x}  U_i,
 \end{equation}
-where $N_{i,p}(x)$ are NURBS basis functions and $U_i$ are the control
-points. We use the expansions~\eqref{eqn:bar-spectral-expansions} in
+where $R_{i,p}(x)$ are NURBS basis functions and $U_i$ are the control
+point displacements. We use the expansions~\eqref{eqn:bar-spectral-expansions} in
 the governing equations~\eqref{eqn:bar-governing-equation}. This gives
 rise to the following residual
 \begin{equation}\label{eqn:bar-governing-equation}
-  R := \pd{}{x} \left( EA  \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i \right) - \rho g  = 0.
+  R := \pd{}{x} \left( EA  \sum_{i=1}^{m} \pd{R_{i,p}(x)}{x}  U_i \right) - \rho g  = 0.
 \end{equation}
 \subsection{Galerkin Projection}
 The analysis procedure involves the projection of the above residual
 onto the basis functions used in the assumed form of solution. This is
 represented mathematically as an inner product (projection operation) as
 \begin{equation}\nonumber
-  \left\langle  {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{N_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
-  \left\langle  {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle 
+  \left\langle  {\color{black}{R_{j,p}(x)}} \bigg\vert {\color{black}{\pd{}{x} \left[ EA \sum_{i=1}^{m} \pd{R_{i,p}(x)}{x}  U_i  \right]}} \right\rangle  =
+  \left\langle  {\color{black}{R_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle 
 \end{equation}
 The weak form is obtained using integration by parts as follows
 \begin{equation}\nonumber
   \begin{gathered}
-    \underset{boundary~term}{{{N_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b}} +  \underset{stiffness~matrix}{\left\langle {\color{black}{\pd{N_{j,p}(x)}{x}}}  \bigg\vert  {\color{black}{EA  \pd{N_{i,p}(x)}{x}  U_i}}   \right\rangle}  = 
-    \underset{force~vector}{\left\langle {\color{black}{N_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle} \quad \forall j = 1, \ldots,m
+    \underset{boundary~term}{{{R_{j,p}(x) EA \pd{u(x)}{x}}}  \bigg\vert_{x_a}^{x_b}} +  \underset{stiffness~matrix}{\left\langle {\color{black}{\pd{R_{j,p}(x)}{x}}}  \bigg\vert  {\color{black}{EA  \pd{R_{i,p}(x)}{x}  U_i}}   \right\rangle}  = 
+    \underset{force~vector}{\left\langle {\color{black}{R_{j,p}(x)}} \bigg\vert {\color{black}{\rho g}} \right\rangle} \quad \forall j = 1, \ldots,m
   \end{gathered}
 \end{equation}
 This gives rise to the following system for each element $x \in [x_a,
@@ -245,9 +253,9 @@ This gives rise to the following system for each element $x \in [x_a,
   \setlength\arraycolsep{1.5pt}
                         {EA}
                         \begin{bmatrix}
-                          \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_1^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
-                          \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_2^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
-                          \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{N_3^\prime(x)}} \vert {\color{black}{N_m^\prime(x)}} \right \rangle \\
+                          \left \langle {\color{black}{R_1^\prime(x)}} \vert {\color{black}{R_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{R_1^\prime(x)}} \vert {\color{black}{R_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{R_1^\prime(x)}} \vert {\color{black}{R_m^\prime(x)}} \right \rangle \\
+                          \left \langle {\color{black}{R_2^\prime(x)}} \vert {\color{black}{R_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{R_2^\prime(x)}} \vert {\color{black}{R_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{R_2^\prime(x)}} \vert {\color{black}{R_m^\prime(x)}} \right \rangle \\
+                          \left \langle {\color{black}{R_3^\prime(x)}} \vert {\color{black}{R_1^\prime(x)}} \right \rangle &  \left \langle {\color{black}{R_3^\prime(x)}} \vert {\color{black}{R_2^\prime(x)}} \right \rangle & \left \langle {\color{black}{R_3^\prime(x)}} \vert {\color{black}{R_m^\prime(x)}} \right \rangle \\
                         \end{bmatrix}
                         \begin{Bmatrix}
                           U_1 \\
@@ -255,9 +263,9 @@ This gives rise to the following system for each element $x \in [x_a,
                           U_3 \\
                         \end{Bmatrix}=
                         \begin{Bmatrix}
-                          \left \langle {\color{black}{N_1(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
-                          \left \langle {\color{black}{N_2(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
-                          \left \langle {\color{black}{N_3(x)}} \vert {\color{black}{\rho g}} \right \rangle \\ 
+                          \left \langle {\color{black}{R_1(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
+                          \left \langle {\color{black}{R_2(x)}} \vert {\color{black}{\rho g}} \right \rangle \\
+                          \left \langle {\color{black}{R_3(x)}} \vert {\color{black}{\rho g}} \right \rangle \\ 
                         \end{Bmatrix}    
 \end{equation}
 The evaluation of stiffness matrix and force vector requires the NURBS
@@ -271,24 +279,24 @@ Table~\ref{tab:anlytical-form-of-nurbs-functions}
     \hline
     Element 1 & Element 2 \\
     \hline
-    $N_1^1(\xi) =  (2 \xi -1)^2$ & $N_1^2(\xi) = (2\xi-2)(\xi-1)$  \\
-    $N_2^1(\xi) = -2\xi(3\xi-2)$ & $N_2^2(\xi) = -6\xi^2 + 8\xi -2$ \\
-    $N_3^1(\xi) =  2\xi^2$       & $N_3^2(\xi) = (2\xi -1)^2$ \\
+    $R_1^1(\xi) =  (2 \xi -1)^2$ & $R_1^2(\xi) = (2\xi-2)(\xi-1)$  \\
+    $R_2^1(\xi) = -2\xi(3\xi-2)$ & $R_2^2(\xi) = -6\xi^2 + 8\xi -2$ \\
+    $R_3^1(\xi) =  2\xi^2$       & $R_3^2(\xi) = (2\xi -1)^2$ \\
     \hline
   \end{tabular}
 \end{table}
 These functions are plotted and visualized in Figure~\ref{fig:nurbs-basis-function-derivatives}.
 
 \subsection{Quadrature and Evalution of Inner Products}
-Evaluation of inner product
+Evaluation of inner product is done as follows
 \begin{equation}\nonumber
   \begin{aligned}
     \underset{\text{inner~product}}{\left\langle {\color{black}{f^x(x)}} \big\vert  {\color{black}{g^x(x)}} \right\rangle} &= \underset{\text{integral}}{\int\limits_{x_a}^{x_b}  {\color{black}{f^x(x)}}  {\color{black}{g^x(x)}}~dx} &= \underset{\text{quadrature}}{\sum_{k=1}^M \alpha_k^x  {\color{black}{f^x(x_k)}}  {\color{black}{g^x(x_k)}}}\\
   \end{aligned}
 \end{equation}  
-      
-Transformation from $x$ to $\xi$ is required as NURBS basis is a
-function of parameter $\xi$
+Note that a transformation from $x$ to $\xi$ is required as NURBS
+basis is a function of parameter $\xi$. This is achieved using
+equations similar to ~\ref{eqn:bar-spectral-expansions}.
 \begin{figure}[h] 
   \begin{subfigure}{0.48\textwidth}
     \centering
@@ -305,11 +313,13 @@ function of parameter $\xi$
   \label{fig:nurbs-basis-function-derivatives}
 \end{figure}
 
-\begin{figure}\label{eqn:bar-solution}
+\begin{figure}
   \centering
   \includegraphics[width=0.5\textwidth]{figures/bar-solution.pdf} \\
+  \caption{IGA solution and exact solution for the problem.}
+  \label{fig:bar-solution}
 \end{figure}
-In Figure~\ref{eqn:bar-solution} we compare the IGA solution with the analytical solution given as
+In Figure~\ref{fig:bar-solution} we compare the IGA solution with the analytical solution given as
 \begin{equation}\nonumber
   u(x) = \frac{\rho g}{E} \left( Lx - \frac{x^2}{2}\right)
 \end{equation}
@@ -380,19 +390,33 @@ Using the global stiffness matrix and force vectors into the global form to obta
 The displacements of the control points are then added to the original control points to obtain the new control points. The new control points are then used to plot the deformed plate. These displacement values can be used to find the stresses and strains in the model
 
 \section{Conclusions}
-B-spline basis function has unique properties like local support exact geometry representation and refinement technique. IGA analysis framework makes use of these NURBS properties. It is observed that the displacement solution obtained from IGA is equivalent to control points of B-spline displacement curve. Coupling of CAD and analysis solvers reduces the burden of mesh regeneration. This minimizes the computational cost. Utilizing the exact geometry in anlysis provide accurate results than FEA. Also, IGA gives better solution per degree of freedom than FEM. \\
-IGA has many advantages over FEM, but also has some disadvantages of its own. IGA is a NURBS based method, analysts must require a lot of CAD knowledge. Multi-patch B-spline modeling of intricate shapes is a very difficult task. Irrespective of the degree of the basis function and number of elements, the FEM solution at nodes always gives exact solution. But, that's not the case in IGA, because of non-interpolation of B-spline control points.  
-\newpage
-\section{Future Work}
+B-spline basis function has unique properties like local support exact
+geometry representation and refinement technique. IGA analysis
+framework makes use of these NURBS properties. It is observed that the
+displacement solution obtained from IGA is equivalent to control
+points of B-spline displacement curve. Coupling of CAD and analysis
+solvers reduces the burden of mesh regeneration. This minimizes the
+computational cost. Utilizing the exact geometry in anlysis provide
+accurate results than FEA. Also, IGA gives better solution per degree
+of freedom than FEM.  IGA has many advantages over FEM, but also has
+some disadvantages of its own. IGA is a NURBS based method, analysts
+must require a lot of CAD knowledge. Multi-patch B-spline modeling of
+intricate shapes is a very difficult task. Irrespective of the degree
+of the basis function and number of elements, the FEM solution at
+nodes always gives exact solution. But, that is not the case in IGA,
+because of non-interpolation of B-spline control points.
+The future work entails the following:
 \begin{itemize}
-    \item Visualize stresses and strains in the model.
-    \item Use IGA for complex geometries to see its benefits.
-    \item Include knot insertion algorithm to extend it for any number of elements.
-    \item Extend the code for 3D models.
+    \item The visualization of quantities such as stresses and strains
+      are not straight forward compared to conventional finite element
+      analysis
+    \item The mesh refiniment process with a knot insertion algorithm
+      to extend it for any number of elements during analysis
+    \item The application of IGA for 3D problems and complex geometries.
 \end{itemize}
 
-
-\bibliographystyle{myabbrvnat} \bibliography{references}
+\bibliographystyle{myabbrvnat}
+\bibliography{references}
 
 \end{document}
 
