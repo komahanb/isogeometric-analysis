@@ -42,16 +42,21 @@
 \title{Isogeometric Analysis Using Non-uniform Rational Bsplines}
 \author{Komahan Boopathy  and Siddarth Niranjan Babu\\
   {\normalsize\itshape School of Aerospace Engineering, Georgia Institute of Technology,
-    Atlanta, GA, USA. } %, 30332-0150, USA.}\\
+    Atlanta, GA, USA. }
 } 
+
+\abstract{Isogeometric analysis uses NURBS basis functions to
+  represent geometry as well as solution fields. In this project, we
+  use isogeometric analysis to analyse deformation of a
+  one-dimensional bar and a two-dimensional plate. First, the
+  representation of curves and surfaces using NURBS is outlined. We
+  then present details pertaining to isogeometric analysis of bar and
+  plate and plot the deformed structures. }
 
 \begin{document}
 \maketitle
-
-%\abstract{}
     
 \section{Introduction and Motivation}
-
 Non-uniform Rational B-Splines (NURBS) \cite{Piegl:NurbsBook} are a
 popular way to represent curves and surfaces in geometry modeling. In
 other words, they provide a basis for three-dimensional euclidean
@@ -139,7 +144,7 @@ We note the following important properties of the Bspline curve:
 \begin{enumerate}
 \item The range of the parameter values is $0 \le u \le n-k+2$
 \item The curve $\vv{p}(u)$ is $C^{k-2}$ continuous
-\item $\vv{p}(u)$ is a composite curve made up of (n-k+2) segements
+\item $\vv{p}(u)$ is a composite curve made up of (n-k+2) segments
 \item Each segment is influenced by $k$ control points
 \item A given control point affects upto $k$ segments
 \item If the starting and ending control points are the same $\vv{P}^0  = \vv{P}^{n+1}$, then the curve $\vv{p}(u)$ is indeed a closed curve
@@ -161,7 +166,7 @@ where $t_i$ are the knot values defined as
 It can be seen that there are a total of $n+k+1$ knot values. We can
 implement a function $\texttt{knot\_values(n,k)}$ that computes the
 knot values with $n$ and $k$ as inputs. The computed knot values can
-be used to compute the basis function $N_{k,i}$ in a recusive manner.
+be used to compute the basis function $N_{k,i}$ in a recursive manner.
 The recursion is terminated when
 \begin{equation}
   N_{0,i}(u) = 
@@ -184,7 +189,7 @@ For ease of notation we define the following form
 \end{equation}
 
 \section{Isogeometric Analysis of Bar}
-An elastic bar is suspended veritically and is allowed to deform under
+An elastic bar is suspended vertically and is allowed to deform under
 self weight as shown in Figure~\ref{fig:bar-setup}. We first consider
 the solution of the elastic problem using isogeometric
 analysis~\cite{bar-analysis,1D_bar}.
@@ -287,7 +292,7 @@ Table~\ref{tab:anlytical-form-of-nurbs-functions}
 \end{table}
 These functions are plotted and visualized in Figure~\ref{fig:nurbs-basis-function-derivatives}.
 
-\subsection{Quadrature and Evalution of Inner Products}
+\subsection{Quadrature and Evaluation of Inner Products}
 Evaluation of inner product is done as follows
 \begin{equation}\nonumber
   \begin{aligned}
@@ -334,7 +339,7 @@ An infinite plate of L=8 and W=8 with a circular hole subjected to in-plane conc
   \caption{\emph{Setup of the deformation of plate problem.}}
   \label{fig:plate-setup}
 \end{figure}
-The geometry can be simplified to a quarter palte due to its symmetry. It is modeled using NURBS with 12 control points. For this plate with a circular hole problem, the order of the basis function is chosen as p=2 and q=2. Therefore, the total of number of active control points and the basis functions in an element are 9. The number of control points along $\xi$ direction is given by $n_{cp}(\xi)$ = Total number of knots-(p+1) = 4 and the number of control points along $\eta$ direction is given by $n_{cp}(\eta)$ = Total number of knots in $\eta$ direction-(q+1) = 3. The geometry is divided into two elements with each having 9 active control points. 
+The geometry can be simplified to a quarter plate due to its symmetry. It is modeled using NURBS with 12 control points. For this plate with a circular hole problem, the order of the basis function is chosen as p=2 and q=2. Therefore, the total of number of active control points and the basis functions in an element are 9. The number of control points along $\xi$ direction is given by $n_{cp}(\xi)$ = Total number of knots-(p+1) = 4 and the number of control points along $\eta$ direction is given by $n_{cp}(\eta)$ = Total number of knots in $\eta$ direction-(q+1) = 3. The geometry is divided into two elements with each having 9 active control points. 
 \begin{figure}[h] 
   \centering
   \includegraphics[width=0.5\textwidth]{figures/plate2.png} 
@@ -387,7 +392,7 @@ Using the global stiffness matrix and force vectors into the global form to obta
 \end{minipage}
 \end{figure}
 
-The displacements of the control points are then added to the original control points to obtain the new control points. The new control points are then used to plot the deformed plate. These displacement values can be used to find the stresses and strains in the model
+The displacements of the control points are then added to the original control points to obtain the new control points. The new control points are then used to plot the deformed plate. These displacement values can be used to find the stresses and strains in the model.
 
 \section{Conclusions}
 B-spline basis function has unique properties like local support exact
@@ -396,7 +401,7 @@ framework makes use of these NURBS properties. It is observed that the
 displacement solution obtained from IGA is equivalent to control
 points of B-spline displacement curve. Coupling of CAD and analysis
 solvers reduces the burden of mesh regeneration. This minimizes the
-computational cost. Utilizing the exact geometry in anlysis provide
+computational cost. Utilizing the exact geometry in analysis provide
 accurate results than FEA. Also, IGA gives better solution per degree
 of freedom than FEM.  IGA has many advantages over FEM, but also has
 some disadvantages of its own. IGA is a NURBS based method, analysts
@@ -410,7 +415,7 @@ The future work entails the following:
     \item The visualization of quantities such as stresses and strains
       are not straight forward compared to conventional finite element
       analysis
-    \item The mesh refiniment process with a knot insertion algorithm
+    \item The mesh refinement process with a knot insertion algorithm
       to extend it for any number of elements during analysis
     \item The application of IGA for 3D problems and complex geometries.
 \end{itemize}
